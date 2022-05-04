@@ -4,19 +4,20 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <atomic>
 #include <mutex>
 
 class LatencyCollector {
 public:
     static LatencyCollector &Instance();
 
-    uint64_t getTrackingPredictionLatency();
-    uint64_t getLatency(uint32_t i);
-    uint64_t getPacketsLostTotal();
-    uint64_t getPacketsLostInSecond();
-    uint64_t getFecFailureTotal();
-    uint64_t getFecFailureInSecond();
-    float getFramesInSecond();
+    uint64_t getTrackingPredictionLatency() const;
+    uint64_t getLatency(uint32_t i) const;
+    uint64_t getPacketsLostTotal() const;
+    uint64_t getPacketsLostInSecond() const;
+    uint64_t getFecFailureTotal() const;
+    uint64_t getFecFailureInSecond() const;
+    float getFramesInSecond() const;
 
     void packetLoss(int64_t lost);
     void fecFailure();
@@ -72,7 +73,7 @@ private:
     uint64_t m_FecFailureInSecond = 0;
     uint64_t m_FecFailurePrevious = 0;
 
-    uint32_t m_ServerTotalLatency = 0;
+    std::atomic<uint32_t> m_ServerTotalLatency { 0 };
 
     // Total/Transport/Decode/Idle latency
     uint64_t m_Latency[5];

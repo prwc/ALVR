@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <mutex>
 #include "packet_types.h"
 #include "reedsolomon/rs.h"
 
@@ -37,7 +38,7 @@ private:
     bool m_fecFailure;
     reed_solomon *m_rs = NULL;
 
-    static bool reed_solomon_initialized;
+    static std::once_flag reed_solomon_initialized;
 };
 
 #endif //ALVRCLIENT_FEC_H

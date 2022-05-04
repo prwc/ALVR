@@ -4,19 +4,25 @@
 #include <inttypes.h>
 #include "fec.h"
 #include "packet_types.h"
+#ifndef ALXR_CLIENT
 #include "utils.h"
+#else
+#include <cstring>
+namespace {
+    inline void LOGI(...) {}
+    inline void LOGE(...) {}
+    inline void FrameLog(uint64_t /*frameIndex*/, const char*/*format*/, ...) {}
+}
+#endif
 
-bool FECQueue::reed_solomon_initialized = false;
+std::once_flag FECQueue::reed_solomon_initialized{};
 
 FECQueue::FECQueue() {
     m_currentFrame.videoFrameIndex = UINT64_MAX;
     m_recovered = true;
     m_fecFailure = false;
 
-    if (!reed_solomon_initialized) {
-        reed_solomon_init();
-        reed_solomon_initialized = true;
-    }
+    std::call_once(reed_solomon_initialized, reed_solomon_init);
 }
 
 FECQueue::~FECQueue() {

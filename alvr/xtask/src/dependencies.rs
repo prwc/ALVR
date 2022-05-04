@@ -16,35 +16,46 @@ fn download_and_extract_zip(url: &str, destination: &Path) {
     fs::remove_file(zip_file).unwrap();
 }
 
-pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
+pub fn build_ffmpeg_linux_install(nvenc_flag: bool, version_tag: &str, enable_decoders: bool, install_path: &std::path::Path) -> std::path::PathBuf {
     /* dependencies: build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev
                      libx264-dev libx265-dev libffmpeg-nvenc-dev nvidia-cuda-toolkit
     */
 
     let download_path = afs::deps_dir().join("linux");
-    let ffmpeg_path = download_path.join("FFmpeg-n4.4");
+    let ffmpeg_path = download_path.join(format!("FFmpeg-{}", version_tag));
     if !ffmpeg_path.exists() {
         download_and_extract_zip(
-            "https://codeload.github.com/FFmpeg/FFmpeg/zip/n4.4",
+            format!("https://codeload.github.com/FFmpeg/FFmpeg/zip/{}", version_tag).as_str(),
             &download_path,
         );
     }
 
+    #[inline(always)]
+    fn enable_if(flag: bool, val: &'static str) -> &'static str {
+        if flag { val } else { "" }
+    }
+
+    let install_prefix =  match install_path.to_str() {
+        Some(ips) if ips.len() > 0 => { format!("--prefix={}", ips) }
+        _ => { String::new() }
+    };
+    
     bash_in(
         &ffmpeg_path,
         &format!(
             // The reason for 4x$ in LDSOFLAGS var refer to https://stackoverflow.com/a/71429999
             // all varients of --extra-ldsoflags='-Wl,-rpath,$ORIGIN' do not work! don't waste your time trying!
             //
-            r#"LDSOFLAGS=-Wl,-rpath,\''$$$$ORIGIN'\' ./configure {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}"#,
-            "--enable-gpl --enable-version3",
-            "--disable-static --enable-shared",
+            r#"LDSOFLAGS=-Wl,-rpath,\''$$$$ORIGIN'\' ./configure {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}"#,
+            install_prefix,
+            "--disable-static",
             "--disable-programs",
             "--disable-doc",
             "--disable-avdevice --disable-avformat --disable-swresample --disable-postproc",
             "--disable-network",
+            "--disable-debug --disable-everything",
+            " --enable-shared --enable-gpl --enable-version3",
             "--enable-lto",
-            "--disable-everything",
             /*
                Describing Nvidia specific options --nvccflags:
                nvcc from CUDA toolkit version 11.0 or higher does not support compiling for 'compute_30' (default in ffmpeg)
@@ -70,13 +81,16 @@ pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
                     .expect("pkg-config cuda entry to have link-paths");
 
                 format!(
-                    "{} {} {} --extra-cflags=\"{}\" --extra-ldflags=\"{}\" {}",
+                    "{} {} {} {} {} --extra-cflags=\"{}\" --extra-ldflags=\"{}\" {} {}",
+                    enable_if(enable_decoders, "--enable-decoder=h264_nvdec --enable-decoder=hevc_nvdec --enable-decoder=h264_cuvid --enable-decoder=hevc_cuvid"),
                     "--enable-encoder=h264_nvenc --enable-encoder=hevc_nvenc --enable-nonfree",
-                    "--enable-cuda-nvcc --enable-libnpp",
+                    "--enable-ffnvcodec --enable-cuda-nvcc --enable-libnpp",
+                    enable_if(enable_decoders, "--enable-nvdec --enable-nvenc --enable-cuvid"),
                     "--nvccflags=\"-gencode arch=compute_52,code=sm_52 -O2\"",
                     include_flags,
                     link_flags,
-                    "--enable-hwaccel=h264_nvenc --enable-hwaccel=hevc_nvenc",
+                    enable_if(enable_decoders, "--enable-hwaccel=h264_nvdec --enable-hwaccel=hevc_nvdec --enable-hwaccel=h264_cuvid --enable-hwaccel=hevc_cuvid"),
+                    "--enable-hwaccel=h264_nvenc --enable-hwaccel=hevc_nvenc"
                 )
             } else {
                 "".to_string()
@@ -84,6 +98,7 @@ pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
             "--enable-encoder=h264_vaapi --enable-encoder=hevc_vaapi",
             "--enable-encoder=libx264 --enable-encoder=libx264rgb --enable-encoder=libx265",
             "--enable-hwaccel=h264_vaapi --enable-hwaccel=hevc_vaapi",
+            enable_if(enable_decoders, "--enable-decoder=libx264 --enable-decoder=libx265 --enable-decoder=h264_vaapi --enable-decoder=hevc_vaapi --enable-vaapi"),
             "--enable-filter=scale --enable-filter=scale_vaapi",
             "--enable-libx264 --enable-libx265 --enable-vulkan",
             "--enable-libdrm --enable-pic --enable-rpath"
@@ -91,8 +106,15 @@ pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
     )
     .unwrap();
     bash_in(&ffmpeg_path, "make -j$(nproc)").unwrap();
-
+    if install_prefix.len() > 0 {
+        bash_in(&ffmpeg_path, "make install").unwrap();
+    }
+    
     ffmpeg_path
+}
+
+pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
+    build_ffmpeg_linux_install(nvenc_flag, "n4.4", false, std::path::Path::new(""))
 }
 
 pub fn extract_ffmpeg_windows() -> std::path::PathBuf {
