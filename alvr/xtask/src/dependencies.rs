@@ -16,7 +16,12 @@ fn download_and_extract_zip(url: &str, destination: &Path) {
     fs::remove_file(zip_file).unwrap();
 }
 
-pub fn build_ffmpeg_linux_install(nvenc_flag: bool, version_tag: &str, enable_decoders: bool, install_path: &std::path::Path) -> std::path::PathBuf {
+pub fn build_ffmpeg_linux_install(
+    nvenc_flag: bool,
+    version_tag: &str,
+    enable_decoders: bool,
+    install_path: &std::path::Path,
+) -> std::path::PathBuf {
     /* dependencies: build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev
                      libx264-dev libx265-dev libffmpeg-nvenc-dev nvidia-cuda-toolkit
     */
@@ -25,21 +30,31 @@ pub fn build_ffmpeg_linux_install(nvenc_flag: bool, version_tag: &str, enable_de
     let ffmpeg_path = download_path.join(format!("FFmpeg-{}", version_tag));
     if !ffmpeg_path.exists() {
         download_and_extract_zip(
-            format!("https://codeload.github.com/FFmpeg/FFmpeg/zip/{}", version_tag).as_str(),
+            format!(
+                "https://codeload.github.com/FFmpeg/FFmpeg/zip/{}",
+                version_tag
+            )
+            .as_str(),
             &download_path,
         );
     }
 
     #[inline(always)]
     fn enable_if(flag: bool, val: &'static str) -> &'static str {
-        if flag { val } else { "" }
+        if flag {
+            val
+        } else {
+            ""
+        }
     }
 
-    let install_prefix =  match install_path.to_str() {
-        Some(ips) if ips.len() > 0 => { format!("--prefix={}", ips) }
-        _ => { String::new() }
+    let install_prefix = match install_path.to_str() {
+        Some(ips) if ips.len() > 0 => {
+            format!("--prefix={}", ips)
+        }
+        _ => String::new(),
     };
-    
+
     bash_in(
         &ffmpeg_path,
         &format!(
@@ -109,7 +124,7 @@ pub fn build_ffmpeg_linux_install(nvenc_flag: bool, version_tag: &str, enable_de
     if install_prefix.len() > 0 {
         bash_in(&ffmpeg_path, "make install").unwrap();
     }
-    
+
     ffmpeg_path
 }
 
