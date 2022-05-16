@@ -53,6 +53,44 @@ jobs:
         with:
           command: build
           args: -p alvr_xtask -p alvr_launcher -p alvr_server -p alvr_vulkan-layer -p vrcompositor-wrapper --verbose
+  
+  build_alxr_linux_no_cuda:
+    # ubuntu-20.04
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Build and install dependencies
+        env:
+          RUST_BACKTRACE: 1
+        run: |
+          sudo apt update && sudo apt upgrade -y        
+          sudo apt install build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev libx264-dev libx265-dev cmake libasound2-dev libjack-jackd2-dev libgtk-3-dev libunwind-dev libffmpeg-nvenc-dev nvidia-cuda-toolkit
+          # alxr specific depends.
+          sudo apt install git wget gcc-10 g++-10 ninja-build libxxf86vm-dev libcjson-dev glslang-dev glslang-tools -y
+          
+          # ubuntu-focal cmake package is too old.
+          wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-linux-x86_64.sh
+          chmod +x cmake-3.23.1-linux-x86_64.sh
+          export PATH=./cmake-3.23.1-linux-x86_64/bin:$PATH
+
+          export CC=/usr/bin/gcc-10
+          export CXX=/usr/bin/g++-10
+
+          cp packaging/deb/cuda.pc /usr/share/pkgconfig
+          cargo xtask build-ffmpeg-linux
+          cd deps/linux/FFmpeg-n4.4 && sudo make install && cd ../../..
+
+      - name: Build crates
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: -p alxr-client -vv
 
   tests:
     runs-on: ubuntu-latest
