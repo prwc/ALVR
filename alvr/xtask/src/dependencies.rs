@@ -129,7 +129,12 @@ pub fn build_ffmpeg_linux_install(
 }
 
 pub fn build_ffmpeg_linux(nvenc_flag: bool) -> std::path::PathBuf {
-    build_ffmpeg_linux_install(nvenc_flag, "n4.4", false, std::path::Path::new(""))
+    build_ffmpeg_linux_install(
+        nvenc_flag,
+        "n4.4",
+        /*enable_decoders=*/ true,
+        std::path::Path::new(""),
+    )
 }
 
 pub fn extract_ffmpeg_windows() -> std::path::PathBuf {
