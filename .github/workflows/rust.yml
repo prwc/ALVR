@@ -69,15 +69,16 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          sudo apt update && sudo apt upgrade -y        
+          sudo apt update && sudo apt upgrade -y
+          # ALVR/FFMPEG specific depends.
           sudo apt install build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev libx264-dev libx265-dev cmake libasound2-dev libjack-jackd2-dev libgtk-3-dev libunwind-dev libffmpeg-nvenc-dev nvidia-cuda-toolkit
-          # alxr specific depends.
-          sudo apt install git wget gcc-10 g++-10 ninja-build libxxf86vm-dev libcjson-dev glslang-dev glslang-tools -y
+          # ALXR specific depends.
+          sudo apt install git wget gcc-10 g++-10 ninja-build libxxf86vm-dev libxcb-glx0-dev libcjson-dev glslang-dev glslang-tools -y
 
           # ubuntu-focal cmake package is too old.
           wget https://github.com/Kitware/CMake/releases/download/v3.23.1/cmake-3.23.1-linux-x86_64.sh
           chmod +x cmake-3.23.1-linux-x86_64.sh
-          export PATH=./cmake-3.23.1-linux-x86_64/bin:$PATH
+          export PATH=${PWD}/cmake-3.23.1-linux-x86_64/bin:$PATH
 
           export CC=/usr/bin/gcc-10
           export CXX=/usr/bin/g++-10
@@ -89,7 +90,11 @@ jobs:
           git submodule update --init
           git submodule update --init --recursive
           
+          echo "$PATH" >> $GITHUB_PATH
       - name: Build crates
+        env:
+          CC: /usr/bin/gcc-10
+          CXX: /usr/bin/g++-10
         uses: actions-rs/cargo@v1
         with:
           command: build
