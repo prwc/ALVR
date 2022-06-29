@@ -274,7 +274,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-android-client"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "alxr-common",
  "jni",
@@ -286,14 +286,14 @@ dependencies = [
 
 [[package]]
 name = "alxr-client"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "alxr-common",
 ]
 
 [[package]]
 name = "alxr-client-pico"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "alxr-common",
  "jni",
@@ -305,7 +305,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-quest"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "alxr-common",
  "jni",
@@ -317,7 +317,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-uwp"
-version = "1.9.0"
+version = "1.8.0"
 dependencies = [
  "alxr-common",
  "toml",
@@ -326,7 +326,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-common"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -351,7 +351,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-engine-sys"
-version = "0.9.0"
+version = "0.8.0"
 dependencies = [
  "bindgen 0.60.1",
  "cc",
@@ -4885,7 +4885,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9c28b6b6a78440b02647358625e3febc90724126480b9da6a967b5f674b3554"
 dependencies = [
  "jni",
- "ndk-glue 0.5.2",
+ "ndk-glue 0.6.2",
  "url",
  "web-sys",
  "widestring 0.5.1",
