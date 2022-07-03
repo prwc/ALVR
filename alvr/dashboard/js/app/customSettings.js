@@ -11,6 +11,7 @@ define([
     "json!app/resources/HTCViveWand.json",
     "json!app/resources/Quest2Touch.json",
     "json!app/resources/HTCViveTracker.json",
+    "json!app/resources/PicoNeo3.json",
 ], function (
     i18n,
     i18nWizard,
@@ -23,7 +24,8 @@ define([
     index,
     vivewand,
     q2touch,
-    vivetracker
+    vivetracker,
+    piconeo3
 ) {
     return function (alvrSettings) {
         const self = this;
@@ -81,6 +83,8 @@ define([
                 q2touch,
                 vivetracker,
                 vivetracker,
+                piconeo3,
+                piconeo3
             ];
 
             controller.append(`<option value="1">Oculus Rift S</option>`);
@@ -88,7 +92,8 @@ define([
             controller.append(`<option value="5">HTC Vive</option>`);
             controller.append(`<option value="7">Oculus Quest 2</option>`);
             controller.append(`<option value="9">HTC Vive Tracker</option>`);
-
+            controller.append(`<option value="11">Pico Neo 3</option>`);
+            
             const select = new Selectal("#_root_headset_controllers_content_controllerMode");
             controller = $("#_root_headset_controllers_content_controllerMode");
 
