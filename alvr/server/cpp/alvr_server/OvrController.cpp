@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <cstring>
 #include <string_view>
-#include <filesystem>
 
 OvrController::OvrController(uint64_t devicePath, float *poseTimeOffset)
     : TrackedDevice(devicePath), m_poseTimeOffset(poseTimeOffset) {
@@ -614,7 +613,14 @@ vr::EVRInitError OvrController::Activate(vr::TrackedDeviceIndex_t unObjectId) {
                 this->prop_container,
                 vr::Prop_NamedIconPathDeviceAlertLow_String,
                 "{alvr_server}/icons/pico_neo3/right_controller_ready_low.png");
-
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceNotReady_String,
+                "{alvr_server}/icons/pico_neo3/right_controller_error.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceStandby_String,
+                "{alvr_server}/icons/pico_neo3/right_controller_ready_alert.png");
         } else {
             // X,Y for left hand.
             vr::VRDriverInput()->CreateBooleanComponent(
@@ -659,6 +665,14 @@ vr::EVRInitError OvrController::Activate(vr::TrackedDeviceIndex_t unObjectId) {
                 this->prop_container,
                 vr::Prop_NamedIconPathDeviceAlertLow_String,
                 "{alvr_server}/icons/pico_neo3/left_controller_ready_low.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceNotReady_String,
+                "{alvr_server}/icons/pico_neo3/left_controller_error.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceStandby_String,
+                "{alvr_server}/icons/pico_neo3/left_controller_ready_alert.png");
         }
 
         vr::VRDriverInput()->CreateBooleanComponent(
@@ -683,6 +697,156 @@ vr::EVRInitError OvrController::Activate(vr::TrackedDeviceIndex_t unObjectId) {
         vr::VRDriverInput()->CreateBooleanComponent(
             this->prop_container, "/input/start/click", &m_handles[ALVR_INPUT_START_CLICK]);
 
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/trigger/click", &m_handles[ALVR_INPUT_TRIGGER_CLICK]);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/trigger/value",
+                                                   &m_handles[ALVR_INPUT_TRIGGER_VALUE],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedOneSided);
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/trigger/touch", &m_handles[ALVR_INPUT_TRIGGER_TOUCH]);
+
+        vr::VRDriverInput()->CreateHapticComponent(
+            this->prop_container, "/output/haptic", &m_compHaptic);
+    } break;
+    case 13: {// WMR
+        const auto SetPathProperty = [](const vr::PropertyContainerHandle_t ulContainerHandle, const vr::ETrackedDeviceProperty prop, const char* const filename)
+        {
+            if (filename == nullptr)
+                return;
+            vr::VRProperties()->SetStringProperty(ulContainerHandle, prop, filename);
+        };        
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/system/click", &m_handles[ALVR_INPUT_SYSTEM_CLICK]);
+        vr::VRDriverInput()->CreateBooleanComponent(this->prop_container,
+                                                    "/input/application_menu/click",
+                                                    &m_handles[ALVR_INPUT_APPLICATION_MENU_CLICK]);
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/grip/click", &m_handles[ALVR_INPUT_GRIP_CLICK]);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/grip/value",
+                                                   &m_handles[ALVR_INPUT_GRIP_VALUE],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedOneSided);
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/grip/touch", &m_handles[ALVR_INPUT_GRIP_TOUCH]);
+        
+        if (this->device_path == RIGHT_HAND_PATH) {
+
+            vr::VRDriverInput()->CreateSkeletonComponent(
+                this->prop_container,
+                "/input/skeleton/right",
+                "/skeleton/hand/right",
+                "/pose/raw",
+                vr::EVRSkeletalTrackingLevel::VRSkeletalTracking_Partial,
+                nullptr,
+                SKELETON_BONE_COUNT,
+                &m_compSkeleton);
+            
+            // icons
+            SetPathProperty(this->prop_container, vr::Prop_NamedIconPathDeviceOff_String,       "{alvr_server}/wmr/pico_neo3/right_controller_off.png");
+            SetPathProperty(this->prop_container, vr::Prop_NamedIconPathDeviceSearching_String, "{alvr_server}/wmr/pico_neo3/right_controller_searching.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceSearchingAlert_String,
+                "{alvr_server}/icons/wmr/controller_right_status_searching_alert.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceReady_String,
+                "{alvr_server}/icons/wmr/controller_right_status_ready.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceReadyAlert_String,
+                "{alvr_server}/icons/wmr/controller_right_status_ready_alert.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceAlertLow_String,
+                "{alvr_server}/icons/wmr/controller_right_status_ready_low.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceNotReady_String,
+                "{alvr_server}/icons/wmr/controller_right_status_error.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceStandby_String,
+                "{alvr_server}/icons/wmr/controller_right_status_standby.png");
+
+        } else {
+
+            vr::VRDriverInput()->CreateSkeletonComponent(
+                this->prop_container,
+                "/input/skeleton/left",
+                "/skeleton/hand/left",
+                "/pose/raw",
+                vr::EVRSkeletalTrackingLevel::VRSkeletalTracking_Partial,
+                nullptr,
+                SKELETON_BONE_COUNT,
+                &m_compSkeleton);
+
+            // icons
+            SetPathProperty(this->prop_container,
+                            vr::Prop_NamedIconPathDeviceOff_String,
+                            "{alvr_server}/icons/wmr/controller_left_status_off.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceSearching_String,
+                "{alvr_server}/icons/wmr/controller_left_status_searching.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceSearchingAlert_String,
+                "{alvr_server}/icons/wmr/controller_left_status_searching_alert.png");
+            SetPathProperty(this->prop_container,
+                            vr::Prop_NamedIconPathDeviceReady_String,
+                            "{alvr_server}/icons/wmr/controller_left_status_ready.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceReadyAlert_String,
+                "{alvr_server}/icons/wmr/controller_left_status_ready_alert.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceAlertLow_String,
+                "{alvr_server}/icons/wmr/controller_left_status_ready_low.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceNotReady_String,
+                "{alvr_server}/icons/wmr/controller_left_status_error.png");
+            SetPathProperty(
+                this->prop_container,
+                vr::Prop_NamedIconPathDeviceStandby_String,
+                "{alvr_server}/icons/wmr/controller_left_status_standby.png");
+        }
+
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/joystick/click", &m_handles[ALVR_INPUT_JOYSTICK_CLICK]);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/joystick/x",
+                                                   &m_handles[ALVR_INPUT_JOYSTICK_X],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedTwoSided);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/joystick/y",
+                                                   &m_handles[ALVR_INPUT_JOYSTICK_Y],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedTwoSided);
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/joystick/touch", &m_handles[ALVR_INPUT_JOYSTICK_TOUCH]);
+        
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/trackpad/touch", &m_handles[ALVR_INPUT_TRACKPAD_TOUCH]);
+        vr::VRDriverInput()->CreateBooleanComponent(
+            this->prop_container, "/input/trackpad/click", &m_handles[ALVR_INPUT_TRACKPAD_CLICK]);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/trackpad/x",
+                                                   &m_handles[ALVR_INPUT_TRACKPAD_X],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedTwoSided);
+        vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
+                                                   "/input/trackpad/y",
+                                                   &m_handles[ALVR_INPUT_TRACKPAD_Y],
+                                                   vr::VRScalarType_Absolute,
+                                                   vr::VRScalarUnits_NormalizedTwoSided);
+        
         vr::VRDriverInput()->CreateBooleanComponent(
             this->prop_container, "/input/trigger/click", &m_handles[ALVR_INPUT_TRIGGER_CLICK]);
         vr::VRDriverInput()->CreateScalarComponent(this->prop_container,
@@ -914,9 +1078,11 @@ bool OvrController::onPoseUpdate(const TrackingInfo::Controller &c) {
         float grip = std::min({rotMiddle, rotRing, rotPinky}) * 4.0f - 3.0f;
 
         switch (Settings::Instance().m_controllerMode) {
+        case 13: // WMR
+            // TODO: make WMR a seperate case when tracking-info packets sperate thumbstick & trackpad fields for controllers that support both!
+        case 11: // Pico Neo 3 (basically the same as Quest)
         case 1: // Oculus Rift
         case 7: // Oculus Quest
-        case 11: // Pico Neo 3 (basically the same as Quest)
             vr::VRDriverInput()->UpdateBooleanComponent(
                 m_handles[ALVR_INPUT_SYSTEM_CLICK], false, 0.0);
             vr::VRDriverInput()->UpdateBooleanComponent(
@@ -1373,9 +1539,11 @@ bool OvrController::onPoseUpdate(const TrackingInfo::Controller &c) {
                     0.0);
             }
             break;
+        case 13: // WMR
+            // TODO: make WMR a seperate case when tracking-info packets sperate thumbstick & trackpad fields for controllers that support both!
+        case 11: // Pico Neo 3 (basically the same as Quest)
         case 1: // Oculus Rift
         case 7: // Oculus Quest
-        case 11: // Pico Neo 3 (basically the same as Quest)
             vr::VRDriverInput()->UpdateBooleanComponent(
                 m_handles[ALVR_INPUT_SYSTEM_CLICK],
                 (c.buttons & ALVR_BUTTON_FLAG(ALVR_INPUT_SYSTEM_CLICK)) != 0,
