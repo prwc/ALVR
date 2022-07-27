@@ -76,9 +76,9 @@ private:
     std::atomic<uint32_t> m_ServerTotalLatency { 0 };
 
     // Total/Transport/Decode/Idle latency
-    uint64_t m_Latency[5];
+    uint64_t m_Latency[5]{ 0,0,0,0,0 };
 
-    uint64_t m_LastSubmit;
+    uint64_t m_LastSubmit = 0;
     float m_FramesInSecond = 0;
 
     FrameTimestamp & getFrame(uint64_t frameIndex);

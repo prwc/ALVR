@@ -1,7 +1,7 @@
 #ifndef ALVRCLIENT_FEC_H
 #define ALVRCLIENT_FEC_H
 
-#include <list>
+#include <memory>
 #include <vector>
 #include <mutex>
 #include "packet_types.h"
@@ -10,14 +10,13 @@
 class FECQueue {
 public:
     FECQueue();
-    ~FECQueue();
 
     void addVideoPacket(const VideoFrame *packet, int packetSize, bool &fecFailure);
     bool reconstruct();
-    const std::byte *getFrameBuffer();
-    int getFrameByteSize();
+    const std::byte *getFrameBuffer() const;
+    int getFrameByteSize() const;
 
-    bool fecFailure();
+    bool fecFailure() const;
     void clearFecFailure();
 private:
 
@@ -36,7 +35,16 @@ private:
     std::vector<std::byte *> m_shards;
     bool m_recovered;
     bool m_fecFailure;
-    reed_solomon *m_rs = NULL;
+
+    struct reed_solomon_deleter {
+        inline void operator()(reed_solomon* rs_ptr) const {
+            if (rs_ptr != nullptr) {
+                reed_solomon_release(rs_ptr);
+            }
+        }
+    };
+    using reed_solomon_ptr = std::unique_ptr<reed_solomon, reed_solomon_deleter>;
+    reed_solomon_ptr m_rs{ nullptr };
 
     static std::once_flag reed_solomon_initialized;
 };

@@ -38,12 +38,12 @@ namespace {
 
 LatencyCollector LatencyCollector::m_Instance;
 
-LatencyCollector::LatencyCollector(){
-    m_StatisticsTime = getTimestampUs();
+LatencyCollector::LatencyCollector()
+: m_StatisticsTime(getTimestampUs() / USECS_IN_SEC) {
 }
 
 LatencyCollector::FrameTimestamp &LatencyCollector::getFrame(uint64_t frameIndex) {
-    std::lock_guard<std::mutex> lock(m_framesMutex);
+    std::scoped_lock<std::mutex> lock(m_framesMutex);
     if (m_Frames.size() > MAX_FRAMES) {
         m_Frames.erase(m_Frames.cbegin());
     }
@@ -127,12 +127,19 @@ void LatencyCollector::resetAll() {
     m_FecFailurePrevious = 0;
 
     m_FramesInSecond = 0;
-
-    m_StatisticsTime = getTimestampUs() / USECS_IN_SEC;
+    m_LastSubmit = 0;
 
     for(int i = 0; i < 5; i++) {
         m_Latency[i] = 0;
     }
+
+    {
+        std::scoped_lock l(m_framesMutex);
+        m_Frames.clear();
+    }
+    m_ServerTotalLatency.store(0);
+
+    m_StatisticsTime = getTimestampUs() / USECS_IN_SEC;
 }
 
 void LatencyCollector::resetSecond(){

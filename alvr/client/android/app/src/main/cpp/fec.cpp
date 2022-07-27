@@ -17,18 +17,27 @@ namespace {
 
 std::once_flag FECQueue::reed_solomon_initialized{};
 
-FECQueue::FECQueue() {
-    m_currentFrame.videoFrameIndex = UINT64_MAX;
-    m_recovered = true;
-    m_fecFailure = false;
-
+FECQueue::FECQueue()
+: m_currentFrame {
+    .type = ALVR_PACKET_TYPE_VIDEO_FRAME,
+    .packetCounter = 0,
+    .trackingFrameIndex = 0,
+    .videoFrameIndex = UINT64_MAX,
+    .sentTime = 0,
+    .frameByteSize = 0,
+    .fecIndex = 0,
+    .fecPercentage = 0
+  },
+  m_shardPackets(0),
+  m_blockSize(0),
+  m_totalDataShards(0),
+  m_totalParityShards(0),
+  m_totalShards(0),
+  m_firstPacketOfNextFrame(0),
+  m_recovered(true),
+  m_fecFailure(false)
+{
     std::call_once(reed_solomon_initialized, reed_solomon_init);
-}
-
-FECQueue::~FECQueue() {
-    if (m_rs != NULL) {
-        reed_solomon_release(m_rs);
-    }
 }
 
 // Add packet to queue. packet must point to buffer whose size=ALVR_MAX_PACKET_SIZE.
@@ -56,11 +65,9 @@ void FECQueue::addVideoPacket(const VideoFrame *packet, int packetSize, bool &fe
         }
         m_currentFrame = *packet;
         m_recovered = false;
-        if (m_rs != NULL) {
-            reed_solomon_release(m_rs);
-        }
+        m_rs.reset();
 
-        uint32_t fecDataPackets = (packet->frameByteSize + ALVR_MAX_VIDEO_BUFFER_SIZE - 1) /
+        const uint32_t fecDataPackets = (packet->frameByteSize + ALVR_MAX_VIDEO_BUFFER_SIZE - 1) /
                                   ALVR_MAX_VIDEO_BUFFER_SIZE;
         m_shardPackets = CalculateFECShardPackets(m_currentFrame.frameByteSize,
                                                   m_currentFrame.fecPercentage);
@@ -81,8 +88,8 @@ void FECQueue::addVideoPacket(const VideoFrame *packet, int packetSize, bool &fe
 
         m_shards.resize(m_totalShards);
 
-        m_rs = reed_solomon_new(m_totalDataShards, m_totalParityShards);
-        if (m_rs == NULL) {
+        m_rs.reset(reed_solomon_new(m_totalDataShards, m_totalParityShards));
+        if (m_rs == nullptr) {
             return;
         }
 
@@ -99,7 +106,7 @@ void FECQueue::addVideoPacket(const VideoFrame *packet, int packetSize, bool &fe
         memset(&m_frameBuffer[0], 0, m_totalShards * m_blockSize);
 
         // Padding packets are not sent, so we can fill bitmap by default.
-        size_t padding = (m_shardPackets - fecDataPackets % m_shardPackets) % m_shardPackets;
+        const size_t padding = (m_shardPackets - fecDataPackets % m_shardPackets) % m_shardPackets;
         for (size_t i = 0; i < padding; i++) {
             m_marks[m_shardPackets - i - 1][m_totalDataShards - 1] = 0;
             m_receivedDataShards[m_shardPackets - i - 1]++;
@@ -141,8 +148,8 @@ void FECQueue::addVideoPacket(const VideoFrame *packet, int packetSize, bool &fe
                  m_currentFrame.videoFrameIndex, m_currentFrame.frameByteSize, m_currentFrame.fecPercentage, m_totalDataShards,
                  m_totalParityShards, m_totalShards, m_shardPackets, m_blockSize);
     }
-    size_t shardIndex = packet->fecIndex / m_shardPackets;
-    size_t packetIndex = packet->fecIndex % m_shardPackets;
+    const size_t shardIndex = packet->fecIndex / m_shardPackets;
+    const size_t packetIndex = packet->fecIndex % m_shardPackets;
     if (m_marks[packetIndex][shardIndex] == 0) {
         // Duplicate packet.
         LOGI("Packet duplication. packetCounter=%d fecIndex=%d", packet->packetCounter,
@@ -174,7 +181,7 @@ bool FECQueue::reconstruct() {
     bool ret = true;
     // On server side, we encoded all buffer in one call of reed_solomon_encode.
     // But client side, we should split shards for more resilient recovery.
-    for (size_t packet = 0; packet < m_shardPackets; packet++) {
+    for (size_t packet = 0; packet < m_shardPackets; ++packet) {
         if (m_recoveredPacket[packet]) {
             continue;
         }
@@ -198,11 +205,11 @@ bool FECQueue::reconstruct() {
                  packet, m_receivedDataShards[packet], m_totalDataShards,
                  m_receivedParityShards[packet], m_totalParityShards);
 
-        for (size_t i = 0; i < m_totalShards; i++) {
+        for (size_t i = 0; i < m_totalShards; ++i) {
             m_shards[i] = &m_frameBuffer[(i * m_shardPackets + packet) * ALVR_MAX_VIDEO_BUFFER_SIZE];
         }
 
-        int result = reed_solomon_reconstruct(m_rs, (unsigned char **) &m_shards[0],
+        int result = reed_solomon_reconstruct(m_rs.get(), (unsigned char**)&m_shards[0],
                                               &m_marks[packet][0],
                                               m_totalShards, ALVR_MAX_VIDEO_BUFFER_SIZE);
         m_recoveredPacket[packet] = true;
@@ -225,15 +232,15 @@ bool FECQueue::reconstruct() {
     return ret;
 }
 
-const std::byte *FECQueue::getFrameBuffer() {
+const std::byte *FECQueue::getFrameBuffer() const {
     return &m_frameBuffer[0];
 }
 
-int FECQueue::getFrameByteSize() {
+int FECQueue::getFrameByteSize() const {
     return m_currentFrame.frameByteSize;
 }
 
-bool FECQueue::fecFailure() {
+bool FECQueue::fecFailure() const {
     return m_fecFailure;
 }
 
