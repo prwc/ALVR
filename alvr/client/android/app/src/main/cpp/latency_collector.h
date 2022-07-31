@@ -61,7 +61,7 @@ private:
         uint64_t rendered2;
         uint64_t submit;
     };
-    static const int MAX_FRAMES = 1024;
+    constexpr static const int MAX_FRAMES = 1024;
     std::map<uint64_t, FrameTimestamp> m_Frames = std::map<uint64_t, FrameTimestamp>();
     std::mutex m_framesMutex;
 
