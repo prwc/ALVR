@@ -1,9 +1,9 @@
 #include "latency_collector.h"
-#include <chrono>
 #ifndef ALXR_CLIENT
     #include "utils.h"
     #include "bindings.h"
-#endif
+#else
+#include <chrono>
 
 namespace {
 #if 0//def __linux__
@@ -31,10 +31,9 @@ namespace {
         using microsecondsU64 = duration<std::uint64_t, microseconds::period>;
         return duration_cast<microsecondsU64>(ClockType::now().time_since_epoch()).count();
     }
-#ifdef ALXR_CLIENT
     inline void FrameLog(...) {}
-#endif
 }
+#endif
 
 LatencyCollector LatencyCollector::m_Instance;
 
