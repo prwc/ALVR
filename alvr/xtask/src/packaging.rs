@@ -124,15 +124,18 @@ pub fn publish_server(is_nightly: bool, root: Option<String>, reproducible: bool
     )
     .unwrap();
     command::run("cargo install cargo-about").unwrap();
-    command::run(&format!(
-        "cargo about generate {} > {}",
-        afs::workspace_dir()
-            .join("alvr")
-            .join("xtask")
-            .join("licenses_template.hbs")
-            .to_string_lossy(),
-        licenses_dir.join("dependencies.html").to_string_lossy()
-    ))
+    command::run_in(
+        &afs::workspace_dir().join("alvr/server"),
+        &format!(
+            "cargo about generate {} > {}",
+            afs::workspace_dir()
+                .join("alvr")
+                .join("xtask")
+                .join("licenses_template.hbs")
+                .to_string_lossy(),
+            licenses_dir.join("dependencies.html").to_string_lossy()
+        ),
+    )
     .unwrap();
     fs::copy(
         afs::workspace_dir()
