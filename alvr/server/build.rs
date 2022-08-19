@@ -56,7 +56,7 @@ fn do_ffmpeg_pkg_config(build: &mut cc::Build) {
 fn do_ffmpeg_windows_config(build: &mut cc::Build) {
     let ffmpeg_dir = afs::deps_dir()
         .join("windows")
-        .join("ffmpeg-n5.0-latest-win64-gpl-shared-5.0");
+        .join("ffmpeg-n5.1-latest-win64-gpl-shared-5.1");
 
     build.include(format!("{}/include", ffmpeg_dir.to_string_lossy()));
 
