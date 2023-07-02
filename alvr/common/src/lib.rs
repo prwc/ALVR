@@ -14,7 +14,7 @@ pub use semver;
 
 pub type StrResult<T = ()> = Result<T, String>;
 
-pub const ALVR_NAME: &str = "ALVR";
+pub const ALVR_NAME: &str = "ALXR";
 
 pub mod prelude {
     pub use crate::{

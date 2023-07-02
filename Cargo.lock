@@ -81,7 +81,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_audio"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -98,7 +98,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -123,7 +123,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_commands"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -137,7 +137,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_common"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "backtrace",
  "glam",
@@ -150,7 +150,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_filesystem"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "dirs",
  "lazy_static",
@@ -159,7 +159,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_launcher"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_commands",
  "alvr_common",
@@ -176,7 +176,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alcro",
  "alvr_audio",
@@ -212,7 +212,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_session"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_common",
  "bytemuck",
@@ -224,7 +224,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_sockets"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -242,7 +242,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_vulkan-layer"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_filesystem",
  "bindgen 0.65.1",
@@ -253,7 +253,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_xtask"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "alvr_filesystem",
  "camino",
@@ -268,7 +268,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-android-client"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alxr-common",
  "jni 0.20.0",
@@ -283,14 +283,14 @@ dependencies = [
 
 [[package]]
 name = "alxr-client"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alxr-common",
 ]
 
 [[package]]
 name = "alxr-client-pico"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alxr-common",
  "jni 0.20.0",
@@ -305,7 +305,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-pico-v4"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alxr-common",
  "jni 0.20.0",
@@ -320,7 +320,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-quest"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alxr-common",
  "jni 0.20.0",
@@ -335,7 +335,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-uwp"
-version = "1.10.0"
+version = "1.11.0"
 dependencies = [
  "alxr-common",
  "toml 0.5.11",
@@ -344,7 +344,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-common"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -370,7 +370,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-engine-sys"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "bindgen 0.65.1",
  "cc",
@@ -625,7 +625,7 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shlex",
- "syn 2.0.22",
+ "syn 2.0.23",
  "which",
 ]
 
@@ -688,7 +688,7 @@ checksum = "fdde5c9cd29ebd706ce1b35600920a33550e402fc998a2e53ad3b42c3c47a192"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -1324,7 +1324,7 @@ checksum = "487585f4d0c6655fe74905e2504d8ad6908e4db67f744eb140876906c2f3175d"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -1702,7 +1702,7 @@ checksum = "89ca545a94061b6365f2c7355b4b32bd20df3ff95f02da9329b34ccc3bd6ee72"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -3287,7 +3287,7 @@ checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -3535,9 +3535,9 @@ dependencies = [
 
 [[package]]
 name = "pin-project-lite"
-version = "0.2.9"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0a7ae3ac2f1173085d398531c705756c94a4c56843785df85a60c1a0afac116"
+checksum = "4c40d25201921e5ff0c862a505c6557ea88568a4e3ace775ab55e93f2f4f9d57"
 
 [[package]]
 name = "pin-utils"
@@ -3564,7 +3564,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9825a04601d60621feed79c4e6b56d65db77cdca55cef43b46b0de1096d1c282"
 dependencies = [
  "proc-macro2 1.0.63",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -4092,7 +4092,7 @@ checksum = "d9735b638ccc51c28bf6914d90a2e9725b377144fc612c49a611fddd1b631d68"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -4445,9 +4445,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.22"
+version = "2.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2efbeae7acf4eabd6bcdcbd11c92f45231ddda7539edc7806bd1a04a03b24616"
+checksum = "59fb7d6d8281a51045d62b8eb3a7d1ce347b76f312af50cd3dc0af39c87c1737"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
@@ -4552,7 +4552,7 @@ checksum = "f9456a42c5b0d803c8cd86e73dd7cc9edd429499f37a3550d286d5e86720569f"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -4680,7 +4680,7 @@ checksum = "630bdcf245f78637c13ec01ffae6187cca34625e8c63150d424b59e55af2675e"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
 ]
 
 [[package]]
@@ -5019,7 +5019,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "vrcompositor-wrapper"
-version = "18.2.3"
+version = "18.4.0"
 dependencies = [
  "exec",
 ]
@@ -5076,7 +5076,7 @@ dependencies = [
  "once_cell",
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
  "wasm-bindgen-shared",
 ]
 
@@ -5110,7 +5110,7 @@ checksum = "54681b18a46765f095758388f2d0cf16eb8d4169b639ab575a8f5693af210c7b"
 dependencies = [
  "proc-macro2 1.0.63",
  "quote 1.0.29",
- "syn 2.0.22",
+ "syn 2.0.23",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -5733,9 +5733,9 @@ checksum = "a67300977d3dc3f8034dae89778f502b6ba20b269527b3223ba59c0cf393bb8a"
 
 [[package]]
 name = "xml-rs"
-version = "0.8.14"
+version = "0.8.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52839dc911083a8ef63efa4d039d1f58b5e409f923e44c80828f206f66e5541c"
+checksum = "5a56c84a8ccd4258aed21c92f70c0f6dea75356b6892ae27c24139da456f9336"
 
 [[package]]
 name = "yasna"
