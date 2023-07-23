@@ -14,7 +14,9 @@ path = "../src/lib.rs"
 alxr-common = { path = "../../alxr-common", features = ["pico-v4-flavor"] }
 jni = "0.20"
 ndk = "0.7"
-ndk-glue = "0.7"
+log = "0.4"
+android_logger = "0.13"
+android-activity = { version="0.4", features = [ "native-activity" ] }
 ndk-context = "0.1"
 libloading = "0.8"
 lazy_static = "1"
