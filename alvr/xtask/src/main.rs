@@ -881,7 +881,7 @@ pub fn build_alxr_app_image(_root: Option<String>, _ffmpeg_version: &str, _flags
 
 fn install_alxr_depends() {
     command::run("rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android").unwrap();
-    command::run("cargo install cargo-apk --git https://github.com/korejan/android-ndk-rs.git --branch android-manifest-entries").unwrap();
+    command::run("cargo install cargo-apk --git https://github.com/korejan/cargo-apk.git --branch android-manifest-entries").unwrap();
 }
 
 #[derive(Clone, Copy, Debug)]
