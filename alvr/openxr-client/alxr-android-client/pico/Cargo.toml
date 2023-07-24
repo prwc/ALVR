@@ -12,8 +12,7 @@ path = "../src/lib.rs"
 
 [dependencies]
 alxr-common = { path = "../../alxr-common", features = ["pico-flavor"] }
-jni = "0.20"
-ndk = "0.7"
+jni = "0.21"
 log = "0.4"
 android_logger = "0.13"
 android-activity = { version="0.4", features = [ "native-activity" ] }

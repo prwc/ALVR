@@ -11,9 +11,9 @@ use jni;
 //   Context.checkSelfPermission() or Activity.requestPermissions()
 //
 fn android_permission_name<'a>(
-    jni_env: &'a jni::JNIEnv,
-    perm_name: &'a str,
-) -> jni::errors::Result<jni::objects::JValue<'a>> {
+    perm_name: &str,
+    jni_env: &mut jni::JNIEnv<'a>,
+) -> jni::errors::Result<jni::objects::JValueOwned<'a>> {
     // nested class permission in class android.Manifest,
     // hence android 'slash' Manifest 'dollar' permission
     let class_manifest_permission = jni_env.find_class("android/Manifest$permission")?;
@@ -31,8 +31,8 @@ fn android_permission_name<'a>(
 //
 fn android_has_permission<'a>(
     activity: jni::sys::jobject,
-    jni_env: &'a jni::JNIEnv,
-    perm_name: &'a str,
+    perm_name: &str,
+    jni_env: &mut jni::JNIEnv<'a>,
 ) -> jni::errors::Result<bool> {
     let class_package_manager = jni_env.find_class("android/content/pm/PackageManager")?;
     let permission_granted = jni_env
@@ -46,7 +46,7 @@ fn android_has_permission<'a>(
     };
 
     let ls_perm = if maybe_custom_perm_name.is_none() {
-        android_permission_name(&jni_env, perm_name)?
+        android_permission_name(perm_name, jni_env)?
     } else {
         maybe_custom_perm_name.unwrap().into()
     };
@@ -56,7 +56,7 @@ fn android_has_permission<'a>(
             activity_obj,
             "checkSelfPermission",
             "(Ljava/lang/String;)I",
-            &[ls_perm],
+            &[(&ls_perm).into()],
         )?
         .i()?;
 
@@ -72,18 +72,18 @@ fn android_has_permission<'a>(
 //
 fn android_request_permissions<'a>(
     activity: jni::sys::jobject,
-    jni_env: &'a jni::JNIEnv,
-    permission_names: &'a [&str],
+    permission_names: &[&str],
+    jni_env: &mut jni::JNIEnv<'a>,
 ) -> jni::errors::Result<()> {
     if permission_names.is_empty() {
         return Ok(());
     }
 
-    let perm_array = jni_env.new_object_array(
-        permission_names.len() as i32,
-        jni_env.find_class("java/lang/String")?,
-        jni_env.new_string("")?,
-    )?;
+    let jstring_class = jni_env.find_class("java/lang/String")?;
+    let jstring_value = jni_env.new_string("")?;
+
+    let perm_array =
+        jni_env.new_object_array(permission_names.len() as i32, jstring_class, jstring_value)?;
     for idx in 0..permission_names.len() {
         let perm_name = &permission_names[idx];
 
@@ -94,21 +94,20 @@ fn android_request_permissions<'a>(
         };
 
         let jperm_name = if maybe_custom_perm_name.is_none() {
-            android_permission_name(&jni_env, perm_name)?
+            android_permission_name(perm_name, jni_env)?
         } else {
             maybe_custom_perm_name.unwrap().into()
         };
 
-        jni_env.set_object_array_element(perm_array, idx as i32, jperm_name.l()?)?;
+        jni_env.set_object_array_element(&perm_array, idx as i32, jperm_name.l()?)?;
     }
 
     let activity_obj = unsafe { jni::objects::JObject::from_raw(activity) };
-    let perm_array_obj = unsafe { jni::objects::JObject::from_raw(perm_array) };
     jni_env.call_method(
         activity_obj,
         "requestPermissions",
         "([Ljava/lang/String;I)V",
-        &[perm_array_obj.into(), 0.into()],
+        &[(&perm_array).into(), 0.into()],
     )?;
     return Ok(());
 }
@@ -117,7 +116,7 @@ pub fn check_android_permissions<'a>(
     activity: jni::sys::jobject,
     jvm: &'a jni::JavaVM,
 ) -> jni::errors::Result<()> {
-    let env = jvm.attach_current_thread()?;
+    let mut env = jvm.attach_current_thread()?;
     let mut permission_names = vec![];
     for perm_name in [
         "RECORD_AUDIO",
@@ -125,9 +124,9 @@ pub fn check_android_permissions<'a>(
         "com.oculus.permission.EYE_TRACKING",
         "com.oculus.permission.FACE_TRACKING",
     ] {
-        if !android_has_permission(activity, &env, &perm_name)? {
+        if !android_has_permission(activity, &perm_name, &mut env)? {
             permission_names.push(perm_name);
         }
     }
-    android_request_permissions(activity, &env, &permission_names)
+    android_request_permissions(activity, &permission_names, &mut env)
 }

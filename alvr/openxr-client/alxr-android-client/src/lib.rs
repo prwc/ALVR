@@ -18,14 +18,14 @@ use alxr_common::{
 };
 
 fn get_build_property<'a>(jvm: &'a jni::JavaVM, property_name: &str) -> String {
-    let env = jvm.attach_current_thread().unwrap();
+    let mut env = jvm.attach_current_thread().unwrap();
 
     let jdevice_name = env
         .get_static_field("android/os/Build", &property_name, "Ljava/lang/String;")
         .unwrap()
         .l()
         .unwrap();
-    let device_name_raw = env.get_string(jdevice_name.into()).unwrap();
+    let device_name_raw = env.get_string((&jdevice_name).into()).unwrap();
 
     device_name_raw.to_string_lossy().as_ref().to_owned()
 }

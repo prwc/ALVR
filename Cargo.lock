@@ -274,11 +274,10 @@ dependencies = [
  "alxr-common",
  "android-activity",
  "android_logger 0.13.1",
- "jni 0.20.0",
+ "jni 0.21.1",
  "lazy_static",
  "libloading 0.8.0",
  "log",
- "ndk 0.7.0",
  "ndk-context",
  "parking_lot 0.12.1",
  "version-compare 0.1.1",
@@ -298,11 +297,10 @@ dependencies = [
  "alxr-common",
  "android-activity",
  "android_logger 0.13.1",
- "jni 0.20.0",
+ "jni 0.21.1",
  "lazy_static",
  "libloading 0.8.0",
  "log",
- "ndk 0.7.0",
  "ndk-context",
  "parking_lot 0.12.1",
  "version-compare 0.1.1",
@@ -315,11 +313,10 @@ dependencies = [
  "alxr-common",
  "android-activity",
  "android_logger 0.13.1",
- "jni 0.20.0",
+ "jni 0.21.1",
  "lazy_static",
  "libloading 0.8.0",
  "log",
- "ndk 0.7.0",
  "ndk-context",
  "parking_lot 0.12.1",
  "version-compare 0.1.1",
@@ -332,11 +329,10 @@ dependencies = [
  "alxr-common",
  "android-activity",
  "android_logger 0.13.1",
- "jni 0.20.0",
+ "jni 0.21.1",
  "lazy_static",
  "libloading 0.8.0",
  "log",
- "ndk 0.7.0",
  "ndk-context",
  "parking_lot 0.12.1",
  "version-compare 0.1.1",
@@ -2668,20 +2664,6 @@ dependencies = [
 
 [[package]]
 name = "jni"
-version = "0.20.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "039022cdf4d7b1cf548d31f60ae783138e5fd42013f6271049d7df7afadef96c"
-dependencies = [
- "cesu8",
- "combine",
- "jni-sys",
- "log",
- "thiserror",
- "walkdir",
-]
-
-[[package]]
-name = "jni"
 version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a87aa2bb7d2af34197c04845522473242e1aa17c12f4935d5856491a7fb8c97"
@@ -4156,18 +4138,18 @@ checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
 
 [[package]]
 name = "serde"
-version = "1.0.174"
+version = "1.0.175"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b88756493a5bd5e5395d53baa70b194b05764ab85b59e43e4b8f4e1192fa9b1"
+checksum = "5d25439cd7397d044e2748a6fe2432b5e85db703d6d097bd014b3c0ad1ebff0b"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.174"
+version = "1.0.175"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e5c3a298c7f978e53536f95a63bdc4c4a64550582f31a0359a9afda6aede62e"
+checksum = "b23f7ade6f110613c0d63858ddb8b94c1041f550eab58a16b371bdf2c9c80ab4"
 dependencies = [
  "proc-macro2 1.0.66",
  "quote 1.0.32",
