@@ -233,21 +233,21 @@ jobs:
       - name: Build alxr-android-generic
         run: |
           unset ANDROID_HOME
-          cargo apk build -p alxr-android-client --verbose
+          cargo apk build -p alxr-android-client
       - name: Build alxr-android-quest
         run: |
           unset ANDROID_HOME
-          cargo apk build -p alxr-client-quest --verbose --target-dir=target/quest
+          cargo apk build -p alxr-client-quest --target-dir=target/quest
       
       - name: Build alxr-android-pico
         run: |
           unset ANDROID_HOME
-          cargo apk build -p alxr-client-pico --verbose --target-dir=target/pico
+          cargo apk build -p alxr-client-pico --target-dir=target/pico
       
       - name: Build alxr-android-pico-v4
         run: |
           unset ANDROID_HOME
-          cargo apk build -p alxr-client-pico-v4 --verbose --target-dir=target/pico-v4
+          cargo apk build -p alxr-client-pico-v4 --target-dir=target/pico-v4
   
   tests:
     runs-on: ubuntu-latest
