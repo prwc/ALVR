@@ -10,6 +10,9 @@ description = "An OpenXR based ALVR client for android platorms"
 # as workaround for quest/pico-neo specific builds dumy Cargo.toml files are create but refer to the same code.
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+no-decoder =  ["alxr-common/no-decoder"] # disables building platform decoders & depeendencies.
+
 [lib]
 crate-type = ["cdylib"]
 

@@ -61,6 +61,7 @@ FLAGS:
     --no-nvidia         Additional flag to use with `build-server` or `build-alxr-client`. Disables nVidia/CUDA support.
     --gpl               Enables usage of GPL libs like ffmpeg on Windows, allowing software encoding.
     --ffmpeg-version    Bundle ffmpeg libraries. Only used for build-alxr-client subcommand on Linux          
+    --no-decoder        Disables building decoder support and dependencies. Only used for build-alxr-*
     --help              Print this text
 
 ARGS:
@@ -417,6 +418,7 @@ pub struct AlxBuildFlags {
     no_nvidia: bool,
     bundle_ffmpeg: bool,
     fetch_crates: bool,
+    no_decoder: bool,
 }
 
 impl Default for AlxBuildFlags {
@@ -427,6 +429,7 @@ impl Default for AlxBuildFlags {
             no_nvidia: true,
             bundle_ffmpeg: true,
             fetch_crates: false,
+            no_decoder: false,
         }
     }
 }
@@ -437,6 +440,7 @@ impl AlxBuildFlags {
         let feature_map = vec![
             (enable_bundle_ffmpeg, "bundled-ffmpeg"),
             (!self.no_nvidia, "cuda-interop"),
+            (self.no_decoder, "no-decoder"),
         ];
 
         let flag_map = vec![
@@ -1023,6 +1027,7 @@ fn main() {
         let for_pico_neo_v4 = args.contains("--pico-v4");
         let for_all_flavors = args.contains("--all-flavors");
         //
+        let no_decoder = args.contains("--no-decoder");
         let bundle_ffmpeg = args.contains("--bundle-ffmpeg");
         let no_nvidia = args.contains("--no-nvidia");
         let gpl = args.contains("--gpl");
@@ -1069,6 +1074,7 @@ fn main() {
                         no_nvidia: no_nvidia,
                         bundle_ffmpeg: bundle_ffmpeg,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1081,6 +1087,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1093,6 +1100,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1103,6 +1111,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     };
                     build_alxr_uwp(root.to_owned(), UWPArch::Aarch64, build_flags);
@@ -1119,6 +1128,7 @@ fn main() {
                         no_nvidia: no_nvidia,
                         bundle_ffmpeg: bundle_ffmpeg,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1129,6 +1139,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     };
                     let flavours = vec![
@@ -1154,6 +1165,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1166,6 +1178,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),
@@ -1178,6 +1191,7 @@ fn main() {
                         no_nvidia: true,
                         bundle_ffmpeg: false,
                         fetch_crates: fetch,
+                        no_decoder: no_decoder,
                         ..Default::default()
                     },
                 ),

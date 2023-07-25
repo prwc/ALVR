@@ -6,6 +6,9 @@ edition = "2021"
 description = "An OpenXR based ALVR client for Pico 4/Neo 3, pre PUI v5.2.x"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+no-decoder =  ["alxr-common/no-decoder"] # disables building platform decoders & depeendencies.
+
 [lib]
 crate-type = ["cdylib"]
 path = "../src/lib.rs" 

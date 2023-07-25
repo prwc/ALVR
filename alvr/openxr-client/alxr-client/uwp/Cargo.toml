@@ -5,6 +5,9 @@ authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
 edition = "2021"
 build = ".build/main.rs"
 
+[features]
+no-decoder =  ["alxr-common/no-decoder"] # disables building platform decoders & depeendencies.
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [[bin]]
 name = "alxr-client-uwp"
