@@ -327,6 +327,7 @@ jobs:
       #     cache-targets: "false"
       - name: Build / Install ALXR Android dependencies
         run: |
+          sudo apt install gcc-multilib
           SDK_MANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
           sudo $SDK_MANAGER --install "ndk;25.2.9519653"
 
@@ -417,6 +418,7 @@ jobs:
       #     cache-targets: "false"
       - name: Build / Install ALXR Android dependencies
         run: |
+          sudo apt install gcc-multilib
           SDK_MANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
           sudo $SDK_MANAGER --install "ndk;25.2.9519653"
 

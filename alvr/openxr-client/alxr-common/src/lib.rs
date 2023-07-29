@@ -340,8 +340,8 @@ pub extern "C" fn input_send(data_ptr: *const TrackingInfo) {
                 (
                     *HEAD_ID,
                     MotionData {
-                        orientation: from_tracking_quat(&data.HeadPose_Pose_Orientation),
-                        position: from_tracking_vector3(&data.HeadPose_Pose_Position),
+                        orientation: from_tracking_quat(&data.headPose.orientation),
+                        position: from_tracking_vector3(&data.headPose.position),
                         linear_velocity: None,
                         angular_velocity: None,
                     },
@@ -350,14 +350,14 @@ pub extern "C" fn input_send(data_ptr: *const TrackingInfo) {
                     *LEFT_HAND_ID,
                     MotionData {
                         orientation: from_tracking_quat(if data.controller[0].isHand {
-                            &data.controller[0].boneRootOrientation
+                            &data.controller[0].boneRootPose.orientation
                         } else {
-                            &data.controller[0].orientation
+                            &data.controller[0].pose.orientation
                         }),
                         position: from_tracking_vector3(if data.controller[0].isHand {
-                            &data.controller[0].boneRootPosition
+                            &data.controller[0].boneRootPose.position
                         } else {
-                            &data.controller[0].position
+                            &data.controller[0].pose.position
                         }),
                         linear_velocity: Some(from_tracking_vector3(
                             &data.controller[0].linearVelocity,
@@ -371,14 +371,14 @@ pub extern "C" fn input_send(data_ptr: *const TrackingInfo) {
                     *RIGHT_HAND_ID,
                     MotionData {
                         orientation: from_tracking_quat(if data.controller[1].isHand {
-                            &data.controller[1].boneRootOrientation
+                            &data.controller[1].boneRootPose.orientation
                         } else {
-                            &data.controller[1].orientation
+                            &data.controller[1].pose.orientation
                         }),
                         position: from_tracking_vector3(if data.controller[1].isHand {
-                            &data.controller[1].boneRootPosition
+                            &data.controller[1].boneRootPose.position
                         } else {
-                            &data.controller[1].position
+                            &data.controller[1].pose.position
                         }),
                         linear_velocity: Some(from_tracking_vector3(
                             &data.controller[1].linearVelocity,

@@ -1,114 +1,129 @@
 #pragma once
 
-struct EyeFov {
+#ifdef __cplusplus
+extern "C" {;
+#endif
+
+#include <stdint.h>
+
+typedef struct EyeFov {
     float left = 49.;
     float right = 45.;
     float top = 50.;
     float bottom = 48.;
-};
+} ALXREyeFov;
 
-struct TrackingQuat {
+typedef struct TrackingQuat {
     float x;
     float y;
     float z;
     float w;
-};
-struct TrackingVector3 {
+} ALXRQuaternionf;
+
+typedef struct TrackingVector3 {
     float x;
     float y;
     float z;
-};
-struct TrackingVector2 {
+} ALXRVector3f;
+
+typedef struct TrackingVector2 {
     float x;
     float y;
-};
-struct TrackingInfo {
-    unsigned long long targetTimestampNs;
-    TrackingQuat HeadPose_Pose_Orientation;
-    TrackingVector3 HeadPose_Pose_Position;
+} ALXRVector2f;
 
-    unsigned char mounted;
+typedef struct ALXRPosef {
+    ALXRQuaternionf orientation;
+    ALXRVector3f    position;
+} ALXRPosef;
 
-    static const unsigned int MAX_CONTROLLERS = 2;
+typedef struct TrackingInfo {
+    static constexpr const uint32_t MAX_CONTROLLERS = 2;
+    static constexpr const uint32_t BONE_COUNT = 19;
     struct Controller {
-        bool enabled;
-        bool isHand;
-        unsigned long long buttons;
+        // Tracking info of hand. A3
+        ALXRQuaternionf boneRotations[BONE_COUNT];
+        ALXRVector3f    bonePositionsBase[BONE_COUNT];
+        ALXRPosef       boneRootPose;
 
-        struct {
-            float x;
-            float y;
-        } trackpadPosition;
+        // Tracking info of controller. (float * 19 = 76 bytes)
+        ALXRPosef    pose;
+        ALXRVector3f angularVelocity;
+        ALXRVector3f linearVelocity;
+
+        ALXRVector2f trackpadPosition;
+
+        uint64_t buttons;
 
         float triggerValue;
         float gripValue;
 
-        // Tracking info of controller. (float * 19 = 76 bytes)
-        TrackingQuat orientation;
-        TrackingVector3 position;
-        TrackingVector3 angularVelocity;
-        TrackingVector3 linearVelocity;
+        uint32_t handFingerConfidences;
 
-        // Tracking info of hand. A3
-        TrackingQuat boneRotations[19];
-        // TrackingQuat boneRotationsBase[alvrHandBone_MaxSkinnable];
-        TrackingVector3 bonePositionsBase[19];
-        TrackingQuat boneRootOrientation;
-        TrackingVector3 boneRootPosition;
-        unsigned int handFingerConfidences;
-    } controller[2];
-};
+        bool enabled;
+        bool isHand;
+    } controller[MAX_CONTROLLERS];
+
+    ALXRPosef headPose;
+    uint64_t  targetTimestampNs;
+    uint8_t   mounted;
+} ALXRTrackingInfo;
+
 // Client >----(mode 0)----> Server
 // Client <----(mode 1)----< Server
 // Client >----(mode 2)----> Server
 // Client <----(mode 3)----< Server
-struct TimeSync {
-    unsigned int type; // ALVR_PACKET_TYPE_TIME_SYNC
-    unsigned int mode; // 0,1,2,3
-    unsigned long long sequence;
-    unsigned long long serverTime;
-    unsigned long long clientTime;
+typedef struct TimeSync {
+    uint32_t type; // ALVR_PACKET_TYPE_TIME_SYNC
+    uint32_t mode; // 0,1,2,3
+    uint64_t sequence;
+    uint64_t serverTime;
+    uint64_t clientTime;
 
     // Following value are filled by client only when mode=0.
-    unsigned long long packetsLostTotal;
-    unsigned long long packetsLostInSecond;
+    uint64_t packetsLostTotal;
+    uint64_t packetsLostInSecond;
 
-    unsigned int averageTotalLatency;
+    uint64_t averageDecodeLatency;
 
-    unsigned int averageSendLatency;
+    uint32_t averageTotalLatency;
 
-    unsigned int averageTransportLatency;
+    uint32_t averageSendLatency;
 
-    unsigned long long averageDecodeLatency;
+    uint32_t averageTransportLatency;
+    
+    uint32_t idleTime;
 
-    unsigned int idleTime;
-
-    unsigned int fecFailure;
-    unsigned long long fecFailureInSecond;
-    unsigned long long fecFailureTotal;
+    uint64_t fecFailureInSecond;
+    uint64_t fecFailureTotal;
+    uint32_t fecFailure;
 
     float fps;
 
-    // Following value are filled by server only when mode=1.
-    unsigned int serverTotalLatency;
-
     // Following value are filled by server only when mode=3.
-    unsigned long long trackingRecvFrameIndex;
-};
-struct VideoFrame {
-    unsigned int type; // ALVR_PACKET_TYPE_VIDEO_FRAME
-    unsigned int packetCounter;
-    unsigned long long trackingFrameIndex;
+    uint64_t trackingRecvFrameIndex;
+
+    // Following value are filled by server only when mode=1.
+    uint32_t serverTotalLatency;
+} ALXRTimeSync;
+
+typedef struct VideoFrame {
+    uint32_t type; // ALVR_PACKET_TYPE_VIDEO_FRAME
+    uint32_t packetCounter;
+    uint64_t trackingFrameIndex;
     // FEC decoder needs some value for identify video frame number to detect new frame.
     // trackingFrameIndex becomes sometimes same value as previous video frame (in case of low
     // tracking rate).
-    unsigned long long videoFrameIndex;
-    unsigned long long sentTime;
-    unsigned int frameByteSize;
-    unsigned int fecIndex;
-    unsigned short fecPercentage;
+    uint64_t videoFrameIndex;
+    uint64_t sentTime;
+    uint32_t frameByteSize;
+    uint32_t fecIndex;
+    uint16_t fecPercentage;
     // char frameBuffer[];
-};
+} ALXRVideoFrame;
+
+#ifdef __cplusplus
+}
+#endif
 
 #ifndef ALXR_CLIENT
 struct OnCreateResult {
