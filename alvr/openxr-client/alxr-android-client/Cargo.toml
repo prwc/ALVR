@@ -1,6 +1,6 @@
 [package]
 name = "alxr-android-client"
-version = "0.11.0"
+version = "0.12.0"
 authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
 edition = "2021"
 description = "An OpenXR based ALVR client for android platorms"
@@ -211,6 +211,21 @@ required = true
 name = "wave.feature.simultaneous_interaction"
 required = true
 
+#<uses-feature
+#    android:name="wave.feature.eyetracking"
+#    android:required="true" />
+#
+[[package.metadata.android.uses_feature]]
+name = "wave.feature.eyetracking"
+required = true
+
+#<uses-feature
+#    android:name="wave.feature.lipexpression"
+#    android:required="true" />
+[[package.metadata.android.uses_feature]]
+name = "wave.feature.lipexpression"
+required = true
+
 # <uses-feature android:name="com.magicleap.api_level" android:version="20" />
 [[package.metadata.android.uses_feature]]
 name = "com.magicleap.api_level"
@@ -277,6 +292,10 @@ name = "android.permission.VIBRATE"
 #<uses-permission android:name="com.magicleap.permission.HAND_TRACKING" />
 [[package.metadata.android.uses_permission]]
 name = "com.magicleap.permission.HAND_TRACKING"
+
+#<uses-permission android:name="com.magicleap.permission.EYE_TRACKING" />
+[[package.metadata.android.uses_permission]]
+name = "com.magicleap.permission.EYE_TRACKING"
 
 [[package.metadata.android.uses_permission]]
 name = "org.khronos.openxr.permission.OPENXR"
