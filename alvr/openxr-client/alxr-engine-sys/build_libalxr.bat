@@ -11,7 +11,7 @@ for /f "usebackq delims=" %%i in (`%toolpath% -latest -property installationPath
 )
 
 if exist !VCVarsAllBat! (
-    call !VCVarsAllBat! !arch! -vcvars_ver=14.36.32532
+    call !VCVarsAllBat! !arch!
     if exist !CMakePath! (
         set PATH=!CMakePath!;!PATH!
     )
