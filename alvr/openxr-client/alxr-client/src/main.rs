@@ -74,6 +74,7 @@ fn main() {
                     patch: 0,
                 },
                 trackingServerPortNo: APP_CONFIG.tracking_server_port_no,
+                simulateHeadless: APP_CONFIG.simulate_headless,
             };
             let mut sys_properties = ALXRSystemProperties::new();
             if !alxr_init(&ctx, &mut sys_properties) {

@@ -212,6 +212,7 @@ unsafe fn run(android_app: &AndroidApp) -> Result<(), Box<dyn std::error::Error>
         eyeTracking: APP_CONFIG.eye_tracking.unwrap_or(ALXREyeTrackingType::Auto),
         firmwareVersion: get_firmware_version(&vm),
         trackingServerPortNo: APP_CONFIG.tracking_server_port_no,
+        simulateHeadless: APP_CONFIG.simulate_headless,
     };
     let mut sys_properties = ALXRSystemProperties::new();
     if !alxr_init(&ctx, &mut sys_properties) {

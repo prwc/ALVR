@@ -106,6 +106,12 @@ pub struct Options {
     /// Sets the port number for the tracking server to listen on.
     #[structopt(long, default_value = "49192")]
     pub tracking_server_port_no: u16,
+
+    /// Enables a headless OpenXR session if supported by the runtime (same as `headless_session`).
+    /// In the absence of native support, will attempt to simulate a headless session.
+    /// Caution: May not be compatible with all runtimes and could lead to unexpected behavior.
+    #[structopt(/*short,*/ long = "simulate-headless")]
+    pub simulate_headless: bool,
 }
 
 #[cfg(target_os = "android")]
@@ -131,6 +137,7 @@ impl Options {
             facial_tracking: Some(ALXRFacialExpressionType::Auto),
             eye_tracking: Some(ALXREyeTrackingType::Auto),
             tracking_server_port_no: ALXR_TRACKING_SERVER_PORT_NO,
+            simulate_headless: false,
         };
 
         let sys_properties = AndroidSystemProperties::new();
@@ -271,6 +278,16 @@ impl Options {
             );
         }
 
+        let property_name = "debug.alxr.simulate_headless";
+        if let Some(value) = sys_properties.get(&property_name) {
+            new_options.simulate_headless = std::str::FromStr::from_str(value.as_str())
+                .unwrap_or(new_options.simulate_headless);
+            println!(
+                "ALXR System Property: {property_name}, input: {value}, parsed-result: {}",
+                new_options.simulate_headless
+            );
+        }
+
         new_options
     }
 }
@@ -298,6 +315,7 @@ impl Options {
             facial_tracking: Some(ALXRFacialExpressionType::Auto),
             eye_tracking: Some(ALXREyeTrackingType::Auto),
             tracking_server_port_no: ALXR_TRACKING_SERVER_PORT_NO,
+            simulate_headless: false,
         };
         new_options
     }
