@@ -293,7 +293,7 @@ value = "1" # 1 == Linear space.
 
 [[package.metadata.android.application.meta_data]]
 name = "picovr.software.eye_tracking"
-value = "false/true"
+value = "1"
 
 # TODO: Re-enable when Pico runtime supports it.
 #[[package.metadata.android.application.meta_data]]
