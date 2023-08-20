@@ -81,7 +81,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_audio"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -98,7 +98,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -123,7 +123,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_commands"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -137,7 +137,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_common"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "backtrace",
  "glam",
@@ -150,7 +150,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_filesystem"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "dirs",
  "lazy_static",
@@ -159,7 +159,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_launcher"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_commands",
  "alvr_common",
@@ -176,7 +176,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alcro",
  "alvr_audio",
@@ -212,7 +212,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_session"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_common",
  "bytemuck",
@@ -224,7 +224,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_sockets"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -243,7 +243,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_vulkan-layer"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_filesystem",
  "bindgen 0.66.1",
@@ -254,7 +254,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_xtask"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "alvr_filesystem",
  "camino",
@@ -849,9 +849,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.0.82"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "305fe645edc1442a0fa8b6726ba61d422798d37a52e12eaecf4b022ebbb88f01"
+checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
 dependencies = [
  "jobserver",
  "libc",
@@ -1329,9 +1329,9 @@ checksum = "c2e66c9d817f1720209181c316d28635c050fa304f9c79e47a520882661b7308"
 
 [[package]]
 name = "deranged"
-version = "0.3.7"
+version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7684a49fb1af197853ef7b2ee694bc1f5b4179556f1e5710e1760c5db6f5e929"
+checksum = "f2696e8a945f658fd14dc3b87242e6b80cd0f36ff04ea560fa39082368847946"
 
 [[package]]
 name = "digest"
@@ -5160,7 +5160,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "vrcompositor-wrapper"
-version = "18.4.0"
+version = "18.5.0"
 dependencies = [
  "exec",
 ]
