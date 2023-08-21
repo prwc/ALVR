@@ -104,20 +104,25 @@ struct AppData {
     resumed: bool,
     gained_focus: bool,
     window_inited: bool,
+    sys_properties: Option<ALXRSystemProperties>,
 }
 
 impl AppData {
-    fn pasue(&mut self) {
+    fn pause(&mut self) {
         self.resumed = false;
-        log::debug!("alxr-client: received on_pause event.");
+        if self.sys_properties.is_some() {
+            shutdown();
+        }
         unsafe { alxr_on_pause() };
         release_wifi_lock();
     }
 
     fn resume(&mut self) {
         acquire_wifi_lock();
-        log::debug!("alxr-client: received on_resume event.");
         unsafe { alxr_on_resume() };
+        if let Some(sys_properties) = self.sys_properties {
+            init_connections(&sys_properties);
+        }
         self.resumed = true;
     }
 
@@ -125,15 +130,27 @@ impl AppData {
         match event {
             PollEvent::Main(main_event) => match main_event {
                 MainEvent::InitWindow { .. } => self.window_inited = true,
-                MainEvent::LostFocus => self.gained_focus = false,
-                MainEvent::GainedFocus => self.gained_focus = true,
-                MainEvent::Pause => self.pasue(),
-                MainEvent::Resume { .. } => self.resume(),
+                MainEvent::LostFocus => {
+                    log::info!("alxr-client: received lost_focus event.");
+                    self.gained_focus = false;
+                }
+                MainEvent::GainedFocus => {
+                    log::info!("alxr-client: received gained_focus event.");
+                    self.gained_focus = true;
+                }
+                MainEvent::Pause => {
+                    log::info!("alxr-client: received pause event.");
+                    self.pause();
+                }
+                MainEvent::Resume { .. } => {
+                    log::info!("alxr-client: received resume event.");
+                    self.resume();
+                }
                 MainEvent::Destroy => self.destroy_requested = true,
                 _ => (),
             },
-            // PollEvent::Wake  => (),
-            // PollEvent::Timeout => (),
+            //PollEvent::Wake  => { log::info!("alxr-client: received wake event."); },
+            //PollEvent::Timeout => { log::info!("alxr-client: received timeout event."); },
             _ => (),
         }
     }
@@ -174,6 +191,7 @@ unsafe fn run(android_app: &AndroidApp) -> Result<(), Box<dyn std::error::Error>
         resumed: false,
         gained_focus: false,
         window_inited: false,
+        sys_properties: None,
     };
     wait_until_window_init(&android_app, &mut app_data);
     if app_data.destroy_requested {
@@ -226,6 +244,7 @@ unsafe fn run(android_app: &AndroidApp) -> Result<(), Box<dyn std::error::Error>
         sys_properties.recommendedEyeHeight = eye_h;
     }
     init_connections(&sys_properties);
+    app_data.sys_properties = Some(sys_properties);
 
     while !app_data.destroy_requested {
         android_app.poll_events(NO_WAIT_TIME, |event| {
