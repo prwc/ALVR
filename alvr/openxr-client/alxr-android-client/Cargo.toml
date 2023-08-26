@@ -315,9 +315,12 @@ authorities = "org.khronos.openxr.runtime_broker;org.khronos.openxr.system_runti
  # possibly needs to change to use appt2
 name = "org.khronos.openxr"
 
-# For Lynx R1
 [[package.metadata.android.queries.intent]]
 actions = ["org.khronos.openxr.OpenXRRuntimeService"]
+
+[[package.metadata.android.queries.intent]]
+actions = ["org.khronos.openxr.OpenXRApiLayerService"]
+
 # For Lynx R1
 [[package.metadata.android.queries.package]]
 name = "com.ultraleap.tracking.service"
