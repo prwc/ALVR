@@ -80,6 +80,18 @@ impl From<&str> for crate::ALXREyeTrackingType {
     }
 }
 
+impl From<&str> for crate::ALXRPassthroughMode {
+    fn from(input: &str) -> Self {
+        let trimmed = input.trim();
+        match trimmed {
+            "None" => crate::ALXRPassthroughMode::None,
+            "BlendLayer" => crate::ALXRPassthroughMode::BlendLayer,
+            "MaskLayer" => crate::ALXRPassthroughMode::MaskLayer,
+            _ => crate::ALXRPassthroughMode::None,
+        }
+    }
+}
+
 impl ALXRSystemProperties {
     pub fn new() -> ALXRSystemProperties {
         ALXRSystemProperties {

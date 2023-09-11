@@ -112,6 +112,10 @@ pub struct Options {
     /// Caution: May not be compatible with all runtimes and could lead to unexpected behavior.
     #[structopt(/*short,*/ long = "simulate-headless")]
     pub simulate_headless: bool,
+
+    /// Sets the initial passthrough mode, default is None (no passthrough blending)
+    #[structopt(long, parse(from_str))]
+    pub passthrough_mode: Option<ALXRPassthroughMode>,
 }
 
 #[cfg(target_os = "android")]
@@ -138,6 +142,7 @@ impl Options {
             eye_tracking: Some(ALXREyeTrackingType::Auto),
             tracking_server_port_no: ALXR_TRACKING_SERVER_PORT_NO,
             simulate_headless: false,
+            passthrough_mode: Some(ALXRPassthroughMode::None),
         };
 
         let sys_properties = AndroidSystemProperties::new();
@@ -288,6 +293,15 @@ impl Options {
             );
         }
 
+        let property_name = "debug.alxr.passthrough_mode";
+        if let Some(value) = sys_properties.get(&property_name) {
+            new_options.passthrough_mode = Some(From::from(value.as_str()));
+            println!(
+                "ALXR System Property: {property_name}, input: {value}, parsed-result: {:?}",
+                new_options.passthrough_mode
+            );
+        }
+
         new_options
     }
 }
@@ -316,6 +330,7 @@ impl Options {
             eye_tracking: Some(ALXREyeTrackingType::Auto),
             tracking_server_port_no: ALXR_TRACKING_SERVER_PORT_NO,
             simulate_headless: false,
+            passthrough_mode: Some(ALXRPassthroughMode::None),
         };
         new_options
     }

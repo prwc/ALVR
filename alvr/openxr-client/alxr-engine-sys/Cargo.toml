@@ -1,6 +1,6 @@
 [package]
 name = "alxr-engine-sys"
-version = "0.13.0"
+version = "0.14.0"
 authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
 edition = "2021"
 links = "alxr_engine"
@@ -20,7 +20,7 @@ no-decoder =  [] # disables building platform decoders & depeendencies.
 
 [build-dependencies]
 cmake = "0.1"
-bindgen = "0.66"
+bindgen = "0.68"
 cc = { version = "1", features = ["parallel"] }
 walkdir = "2"
 target-lexicon = "0.12"

@@ -15,7 +15,7 @@ use alxr_common::{
     init_connections, input_send, path_string_to_hash, request_idr, set_waiting_next_idr, shutdown,
     time_sync_send, video_error_report_send, views_config_send, ALXRClientCtx, ALXRColorSpace,
     ALXRDecoderType, ALXREyeTrackingType, ALXRFacialExpressionType, ALXRGraphicsApi,
-    ALXRSystemProperties, ALXRVersion, APP_CONFIG,
+    ALXRPassthroughMode, ALXRSystemProperties, ALXRVersion, APP_CONFIG,
 };
 
 fn get_build_property<'a>(jvm: &'a jni::JavaVM, property_name: &str) -> String {
@@ -231,6 +231,9 @@ unsafe fn run(android_app: &AndroidApp) -> Result<(), Box<dyn std::error::Error>
         firmwareVersion: get_firmware_version(&vm),
         trackingServerPortNo: APP_CONFIG.tracking_server_port_no,
         simulateHeadless: APP_CONFIG.simulate_headless,
+        passthroughMode: APP_CONFIG
+            .passthrough_mode
+            .unwrap_or(ALXRPassthroughMode::None),
     };
     let mut sys_properties = ALXRSystemProperties::new();
     if !alxr_init(&ctx, &mut sys_properties) {
