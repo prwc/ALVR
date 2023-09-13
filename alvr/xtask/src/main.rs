@@ -36,6 +36,7 @@ SUBCOMMANDS:
     build-alxr-quest    Build OpenXR based client for Oculus Quest (same as `build-alxr-android --oculus-quest`), then copy binaries to build folder
     build-alxr-pico     Build OpenXR based client for Pico 4/Neo 3 PUI >= 5.2.x (same as `build-alxr-android --pico`), then copy binaries to build folder
     build-alxr-pico-v4  Build OpenXR based client for Pico 4/Neo 3 PRE PUI 5.2.x (same as `build-alxr-android --pico-v4`), then copy binaries to build folder
+    build-alxr-lynx     Build OpenXR based client for Lynx R-1 (same as `build-alxr-android --lynx`), then copy binaries to build folder
     build-ffmpeg-linux  Build FFmpeg with VAAPI, NvEnc and Vulkan support. Only for CI
     publish-server      Build server in release mode, make portable version and installer
     publish-client      Build client for all headsets
@@ -899,6 +900,7 @@ pub enum AndroidFlavor {
     OculusQuest, // Q1 or Q2
     Pico,        // PUI >= 5.2.x
     PicoV4,      // PUI >= 4.7.x && < 5.2.x
+    Lynx,
 }
 
 pub fn build_alxr_android(
@@ -926,6 +928,7 @@ pub fn build_alxr_android(
         AndroidFlavor::OculusQuest => "quest",
         AndroidFlavor::Pico => "pico",
         AndroidFlavor::PicoV4 => "pico-v4",
+        AndroidFlavor::Lynx => "lynx",
         _ => "",
     };
     // cargo-apk has an issue where it will search the entire "target" build directory for "output" files that contain
@@ -1030,6 +1033,7 @@ fn main() {
         let for_generic = args.contains("--generic");
         let for_pico = args.contains("--pico");
         let for_pico_neo_v4 = args.contains("--pico-v4");
+        let for_lynx = args.contains("--lynx");
         let for_all_flavors = args.contains("--all-flavors");
         let oculus_ext = args.contains("--oculus-ext");
         //
@@ -1154,6 +1158,7 @@ fn main() {
                         (for_oculus_quest, AndroidFlavor::OculusQuest),
                         (for_pico, AndroidFlavor::Pico),
                         (for_pico_neo_v4, AndroidFlavor::PicoV4),
+                        (for_lynx, AndroidFlavor::Lynx),
                     ];
 
                     for (_, flavour) in flavours.iter().filter(|(f, _)| for_all_flavors || *f) {
@@ -1192,6 +1197,19 @@ fn main() {
                 "build-alxr-pico-v4" => build_alxr_android(
                     root,
                     AndroidFlavor::PicoV4,
+                    AlxBuildFlags {
+                        is_release: is_release,
+                        reproducible: reproducible,
+                        no_nvidia: true,
+                        bundle_ffmpeg: false,
+                        fetch_crates: fetch,
+                        no_decoder: no_decoder,
+                        ..Default::default()
+                    },
+                ),
+                "build-alxr-lynx" => build_alxr_android(
+                    root,
+                    AndroidFlavor::Lynx,
                     AlxBuildFlags {
                         is_release: is_release,
                         reproducible: reproducible,

@@ -1,6 +1,6 @@
 [package]
 name = "alxr-engine-sys"
-version = "0.14.0"
+version = "0.14.1"
 authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
 edition = "2021"
 links = "alxr_engine"
@@ -11,6 +11,8 @@ generic-flavor = [] # default if none specified.
 quest-flavor = []
 pico-flavor = []
 pico-v4-flavor = []
+lynx-flavor = []
+
 # These features are only for non-android builds.
 cuda-interop = []
 bundled-ffmpeg = []
