@@ -224,32 +224,37 @@ jobs:
         run: |
           sudo apt update && sudo apt upgrade -y
           sudo apt install gcc-multilib
+
           SDK_MANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
           sudo $SDK_MANAGER --install "ndk;26.0.10792818"
-          
+
           rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
           cargo install cargo-apk --git https://github.com/korejan/cargo-apk.git --branch android-manifest-entries
           
           # Fetch alxr-engine submodule.          
-          git submodule update --init --recursive          
-      
+          git submodule update --init --recursive
+            
       - name: Build alxr-android-generic
         run: |
           unset ANDROID_HOME
+          JAVA_HOME=$JAVA_HOME_17_X64
           cargo apk build -p alxr-android-client
       - name: Build alxr-android-quest
         run: |
           unset ANDROID_HOME
+          JAVA_HOME=$JAVA_HOME_17_X64
           cargo apk build -p alxr-client-quest --target-dir=target/quest
       
       - name: Build alxr-android-pico
         run: |
           unset ANDROID_HOME
+          JAVA_HOME=$JAVA_HOME_17_X64
           cargo apk build -p alxr-client-pico --target-dir=target/pico
       
       - name: Build alxr-android-pico-v4
         run: |
           unset ANDROID_HOME
+          JAVA_HOME=$JAVA_HOME_17_X64
           cargo apk build -p alxr-client-pico-v4 --target-dir=target/pico-v4
   
   tests:

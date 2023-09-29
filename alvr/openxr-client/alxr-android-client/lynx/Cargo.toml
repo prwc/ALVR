@@ -1,6 +1,6 @@
 [package]
 name = "alxr-client-lynx"
-version = "0.14.1"
+version = "0.16.0"
 authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
 edition = "2021"
 description = "An OpenXR based ALVR client for android platorms"
@@ -91,7 +91,7 @@ keystore_password = "android"
 # Defaults to a `min_sdk_version` of 23 and `target_sdk_version` is based on the ndk's default platform.
 [package.metadata.android.sdk]
 target_sdk_version = 29
-compile_sdk = 33
+compile_sdk = 34
 min_sdk_version = 28#24 # for offical low-latency medicodec mode to be enabled, min sdk must be >= 30.
 
 # Adds extra arbitrary XML attributes to the <application> tag in the manifest.
