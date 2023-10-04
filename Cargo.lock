@@ -275,7 +275,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-android-client"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
  "android-activity",
@@ -291,14 +291,14 @@ dependencies = [
 
 [[package]]
 name = "alxr-client"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
 ]
 
 [[package]]
 name = "alxr-client-lynx"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
  "android-activity",
@@ -314,7 +314,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-pico"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
  "android-activity",
@@ -330,7 +330,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-pico-v4"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
  "android-activity",
@@ -346,7 +346,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-quest"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alxr-common",
  "android-activity",
@@ -362,7 +362,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-client-uwp"
-version = "1.16.0"
+version = "1.16.1"
 dependencies = [
  "alxr-common",
  "toml 0.5.11",
@@ -371,7 +371,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-common"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -397,7 +397,7 @@ dependencies = [
 
 [[package]]
 name = "alxr-engine-sys"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "bindgen 0.68.1",
  "cc",
@@ -570,7 +570,7 @@ dependencies = [
  "glib-sys 0.15.10",
  "gobject-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -799,7 +799,7 @@ checksum = "3c55d429bef56ac9172d25fecb85dc8068307d17acd74b377866b7a1ef25d3c8"
 dependencies = [
  "glib-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -1916,7 +1916,7 @@ dependencies = [
  "glib-sys 0.15.10",
  "gobject-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -1950,7 +1950,7 @@ dependencies = [
  "libc",
  "pango-sys 0.15.10",
  "pkg-config",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -2040,7 +2040,7 @@ dependencies = [
  "glib-sys 0.15.10",
  "gobject-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
  "winapi",
 ]
 
@@ -2140,7 +2140,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef4b192f8e65e9cf76cbf4ea71fa8e3be4a0e18ffe3d68b8da6836974cc5bad4"
 dependencies = [
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -2180,7 +2180,7 @@ checksum = "0d57ce44246becd17153bd035ab4d32cfee096a657fc01f2231c9278378d1e0a"
 dependencies = [
  "glib-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -2337,7 +2337,7 @@ dependencies = [
  "gobject-sys 0.15.10",
  "libc",
  "pango-sys 0.15.10",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -3469,7 +3469,7 @@ dependencies = [
  "glib-sys 0.15.10",
  "gobject-sys 0.15.10",
  "libc",
- "system-deps 6.1.1",
+ "system-deps 6.1.2",
 ]
 
 [[package]]
@@ -3687,7 +3687,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f4c021e1093a56626774e81216a4ce732a735e5bad4868a03f3ed65ca0c3919"
 dependencies = [
  "once_cell",
- "toml_edit",
+ "toml_edit 0.19.15",
 ]
 
 [[package]]
@@ -3957,9 +3957,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.11.20"
+version = "0.11.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e9ad3fe7488d7e34558a2033d45a0c90b72d97b4f80705666fea71472e2e6a1"
+checksum = "046cd98826c46c2ac8ddecae268eb5c2e58628688a5fc7a2643704a73faba95b"
 dependencies = [
  "base64",
  "bytes",
@@ -3982,6 +3982,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_urlencoded",
+ "system-configuration",
  "tokio",
  "tokio-native-tls",
  "tower-service",
@@ -4062,9 +4063,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.15"
+version = "0.38.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2f9da0cbd88f9f09e7814e388301c8414c51c62aa6ce1e4b5c551d49d96e531"
+checksum = "f25469e9ae0f3d0047ca8b93fc56843f38e6774f0914a107ff8b41be8be8e0b7"
 dependencies = [
  "bitflags 2.4.0",
  "errno 0.3.4",
@@ -4593,6 +4594,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "system-configuration"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba3a3adc5c275d719af8cb4272ea1c4a6d668a777f37e115f6d11ddbc1c8e0e7"
+dependencies = [
+ "bitflags 1.3.2",
+ "core-foundation 0.9.3",
+ "system-configuration-sys",
+]
+
+[[package]]
+name = "system-configuration-sys"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a75fb188eb626b924683e3b95e3a48e63551fcfb51949de2f06a9d91dbee93c9"
+dependencies = [
+ "core-foundation-sys 0.8.4",
+ "libc",
+]
+
+[[package]]
 name = "system-deps"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4609,14 +4631,14 @@ dependencies = [
 
 [[package]]
 name = "system-deps"
-version = "6.1.1"
+version = "6.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30c2de8a4d8f4b823d634affc9cd2a74ec98c53a756f317e529a48046cbf71f3"
+checksum = "94af52f9402f94aac4948a2518b43359be8d9ce6cd9efc1c4de3b2f7b7e897d6"
 dependencies = [
  "cfg-expr",
  "heck 0.4.1",
  "pkg-config",
- "toml 0.7.8",
+ "toml 0.8.2",
  "version-compare 0.1.1",
 ]
 
@@ -4744,9 +4766,9 @@ dependencies = [
 
 [[package]]
 name = "tinystr"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b07bb54ef1f8ff27564b08b861144d3b8d40263efe07684f64987f4c0d044e3e"
+checksum = "d5d0e245e80bdc9b4e5356fc45a72184abbc3861992603f515270e9340f5a219"
 dependencies = [
  "displaydoc",
 ]
@@ -4842,14 +4864,14 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.7.8"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd79e69d3b627db300ff956027cc6c3798cef26d22526befdfcd12feeb6d2257"
+checksum = "185d8ab0dfbb35cf1399a6344d8484209c088f75f8f68230da55d48d95d43e3d"
 dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "toml_edit",
+ "toml_edit 0.20.2",
 ]
 
 [[package]]
@@ -4866,6 +4888,17 @@ name = "toml_edit"
 version = "0.19.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b5bb770da30e5cbfde35a2d7b9b8a2c4b8ef89548a7a6aeab5c9a576e3e7421"
+dependencies = [
+ "indexmap 2.0.2",
+ "toml_datetime",
+ "winnow",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.20.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "396e4d48bbb2b7554c944bde63101b5ae446cff6ec4a24227428f15eb72ef338"
 dependencies = [
  "indexmap 2.0.2",
  "serde",
@@ -5382,9 +5415,9 @@ dependencies = [
 
 [[package]]
 name = "wgpu-hal"
-version = "0.17.1"
+version = "0.17.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0df4fc240da3c460a52cf0ff8f1b71fd6544a6b49f74ff2330238fcb0fd99512"
+checksum = "9a80bf0e3c77399bb52850cb0830af9bad073d5cfcb9dd8253bef8125c42db17"
 dependencies = [
  "android_system_properties",
  "arrayvec 0.7.4",
