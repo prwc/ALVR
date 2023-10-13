@@ -311,7 +311,7 @@ jobs:
     needs: [prepare_release]
     env:
       RUST_BACKTRACE: 1
-      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/26.0.10792818
+      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/26.1.10909125
       ANDROID_NDK_HOME: $ANDROID_NDK_ROOT
       JAVA_HOME: $JAVA_HOME_17_X64
     steps:
@@ -332,7 +332,7 @@ jobs:
           sudo apt update && sudo apt upgrade -y
           sudo apt install gcc-multilib
           SDK_MANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
-          sudo $SDK_MANAGER --install "ndk;26.0.10792818"
+          sudo $SDK_MANAGER --install "ndk;26.1.10909125"
 
           rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
           cargo install cargo-apk --git https://github.com/korejan/cargo-apk.git --branch android-manifest-entries
@@ -345,30 +345,35 @@ jobs:
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-android --generic --release
+          cargo clean
       
       - name: Build & Package alxr-android-quest-release
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-quest --release
+          cargo clean
       
       - name: Build & Package alxr-android-pico-release
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-pico --release
+          cargo clean
       
       - name: Build & Package alxr-android-pico-v4-release
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-pico-v4 --release
+          cargo clean
       
       - name: Build & Package alxr-android-lynx-release
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-lynx --release
+          cargo clean
       
       - name: Upload alxr-android-generic-release
         uses: actions/upload-release-asset@v1
@@ -425,7 +430,7 @@ jobs:
     needs: [prepare_release]
     env:
       RUST_BACKTRACE: 1
-      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/26.0.10792818
+      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/26.1.10909125
       ANDROID_NDK_HOME: $ANDROID_NDK_ROOT
       JAVA_HOME: $JAVA_HOME_17_X64
     steps:
@@ -446,7 +451,7 @@ jobs:
           sudo apt update && sudo apt upgrade -y
           sudo apt install gcc-multilib
           SDK_MANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
-          sudo $SDK_MANAGER --install "ndk;26.0.10792818"
+          sudo $SDK_MANAGER --install "ndk;26.1.10909125"
 
           rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android
           cargo install cargo-apk --git https://github.com/korejan/cargo-apk.git --branch android-manifest-entries
@@ -459,40 +464,50 @@ jobs:
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-android --generic
-          cd ./build/debug/alxr_client_android
+          pushd ./build/debug/alxr_client_android
           mv alxr-client.apk alxr-client-debug.apk
+          popd
+          cargo clean
       
       - name: Build & Package alxr-android-quest-debug
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-quest
-          cd ./build/debug/alxr_client_android
+          pushd ./build/debug/alxr_client_android
           mv alxr-client-quest.apk alxr-client-quest-debug.apk
+          popd
+          cargo clean
       
       - name: Build & Package alxr-android-pico-debug
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-pico
-          cd ./build/debug/alxr_client_android
+          pushd ./build/debug/alxr_client_android
           mv alxr-client-pico.apk alxr-client-pico-debug.apk
+          popd
+          cargo clean
       
       - name: Build & Package alxr-android-pico-v4-debug
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-pico-v4
-          cd ./build/debug/alxr_client_android
+          pushd ./build/debug/alxr_client_android
           mv alxr-client-pico-v4.apk alxr-client-pico-v4-debug.apk
+          popd
+          cargo clean
       
       - name: Build & Package alxr-android-lynx-debug
         run: |
           unset ANDROID_HOME
           JAVA_HOME=$JAVA_HOME_17_X64
           cargo xtask build-alxr-lynx
-          cd ./build/debug/alxr_client_android
+          pushd ./build/debug/alxr_client_android
           mv alxr-clientlynx.apk alxr-client-lynx-debug.apk
+          popd
+          cargo clean
       
       - name: Upload alxr-android-generic-debug
         uses: actions/upload-release-asset@v1
