@@ -67,7 +67,7 @@ fern = "0.6"
 
 [build-dependencies]
 alvr_filesystem = { path = "../filesystem" }
-bindgen = "0.68"
+bindgen = "0.69"
 cc = { version = "1", features = ["parallel"] }
 walkdir = "2"
 

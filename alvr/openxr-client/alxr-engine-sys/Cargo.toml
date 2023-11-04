@@ -22,7 +22,7 @@ no-decoder =  [] # disables building platform decoders & depeendencies.
 
 [build-dependencies]
 cmake = "0.1"
-bindgen = "0.68"
+bindgen = "0.69"
 cc = { version = "1", features = ["parallel"] }
 walkdir = "2"
 target-lexicon = "0.12"
