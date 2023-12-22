@@ -53,15 +53,44 @@ private:
     bool m_recovered;
     bool m_fecFailure;
 
-    struct reed_solomon_deleter {
-        inline void operator()(reed_solomon* rs_ptr) const {
-            if (rs_ptr != nullptr) {
-                reed_solomon_release(rs_ptr);
+    struct ReedSolomon final : reed_solomon {
+
+        constexpr const reed_solomon& base() const { return static_cast<const reed_solomon&>(*this); }
+        constexpr reed_solomon& base() { return static_cast<reed_solomon&>(*this); }
+
+        ReedSolomon(const ReedSolomon&) = delete;
+        ReedSolomon& operator=(const ReedSolomon&) = delete;
+
+        constexpr ReedSolomon() noexcept
+        : reed_solomon{}{}
+
+		ReedSolomon(const std::size_t data_shards, const std::size_t parity_shards) noexcept
+        : reed_solomon{} {
+            if (reed_solomon_new(static_cast<std::int32_t>(data_shards), static_cast<std::int32_t>(parity_shards), this) < 0) {
+                base() = {};
             }
+		}
+
+        constexpr ReedSolomon(ReedSolomon&& src) noexcept
+        : reed_solomon{ src.base() } {
+            src.base() = {};
         }
-    };
-    using reed_solomon_ptr = std::unique_ptr<reed_solomon, reed_solomon_deleter>;
-    reed_solomon_ptr m_rs{ nullptr };
+
+        constexpr ReedSolomon& operator=(ReedSolomon&& src) noexcept {
+            base() = src.base();
+            src.base() = {};
+            return *this;
+        }
+
+        ~ReedSolomon() noexcept {
+            reed_solomon_release(this);
+        }
+
+        bool isValid() const noexcept {
+            return m != nullptr && parity != nullptr;
+		}
+	};
+    ReedSolomon m_rs{};
 
     static std::once_flag reed_solomon_initialized;
 };

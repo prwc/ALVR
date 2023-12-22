@@ -376,16 +376,14 @@ void reed_solomon_init(void) {
     init_mul_table();
 }
 
-reed_solomon* reed_solomon_new(int data_shards, int parity_shards) {
+int reed_solomon_new(int data_shards, int parity_shards, reed_solomon* rs) {
     gf* vm = NULL;
     gf* top = NULL;
     int err = 0;
-    reed_solomon* rs = NULL;
-
+    
     do {
-        rs = malloc(sizeof(reed_solomon));
         if (NULL == rs)
-            return NULL;
+            return -1;
 
         rs->data_shards = data_shards;
         rs->parity_shards = parity_shards;
@@ -441,39 +439,34 @@ reed_solomon* reed_solomon_new(int data_shards, int parity_shards) {
         free(top);
         vm = NULL;
         top = NULL;
-        return rs;
+        return 0;
 
     } while(0);
 
-    fprintf(stderr, "err=%d\n", err);
+    if (err != 0) {
+        fprintf(stderr, "err=%d\n", err);
+    }
+
     if (NULL != vm)
         free(vm);
-
     if (NULL != top)
         free(top);
 
-    if (NULL != rs) {
-        if (NULL != rs->m)
-            free(rs->m);
-
-        if (NULL != rs->parity)
-            free(rs->parity);
-
-        free(rs);
-    }
-
-    return NULL;
+    reed_solomon_release(rs);
+    return -1;
 }
 
 void reed_solomon_release(reed_solomon* rs) {
-    if (NULL != rs) {
-        if (NULL != rs->m)
-            free(rs->m);
+    if (rs == NULL)
+        return;
 
-        if (NULL != rs->parity)
-            free(rs->parity);
-
-        free(rs);
+    if (NULL != rs->m) {
+        free(rs->m);
+        rs->m = NULL;
+    }
+    if (NULL != rs->parity) {
+        free(rs->parity);
+        rs->parity = NULL;
     }
 }
 

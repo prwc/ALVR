@@ -65,8 +65,7 @@ void FECQueue::addVideoPacket(const VideoFrame& packet, const FECQueue::VideoPac
         }
         m_currentFrame = packet;
         m_recovered = false;
-        m_rs.reset();
-
+        
         const uint32_t fecDataPackets = (packet.frameByteSize + ALVR_MAX_VIDEO_BUFFER_SIZE - 1) /
                                   ALVR_MAX_VIDEO_BUFFER_SIZE;
         m_shardPackets = CalculateFECShardPackets(m_currentFrame.frameByteSize,
@@ -88,8 +87,8 @@ void FECQueue::addVideoPacket(const VideoFrame& packet, const FECQueue::VideoPac
 
         m_shards.resize(m_totalShards);
 
-        m_rs.reset(reed_solomon_new(m_totalDataShards, m_totalParityShards));
-        if (m_rs == nullptr) {
+        m_rs = ReedSolomon{ m_totalDataShards, m_totalParityShards };
+        if (!m_rs.isValid()) {
             return;
         }
 
@@ -190,10 +189,10 @@ bool FECQueue::reconstruct() {
             m_recoveredPacket[packet] = true;
             continue;
         }
-        m_rs->shards = m_receivedDataShards[packet] +
+        m_rs.shards = m_receivedDataShards[packet] +
                        m_receivedParityShards[packet]; //Don't let RS complain about missing parity packets
 
-        if (m_rs->shards < (int) m_totalDataShards) {
+        if (m_rs.shards < (int) m_totalDataShards) {
             // Not enough parity data
             ret = false;
             continue;
@@ -208,7 +207,7 @@ bool FECQueue::reconstruct() {
             m_shards[i] = &m_frameBuffer[(i * m_shardPackets + packet) * ALVR_MAX_VIDEO_BUFFER_SIZE];
         }
 
-        int result = reed_solomon_reconstruct(m_rs.get(), (unsigned char**)&m_shards[0],
+        int result = reed_solomon_reconstruct(&m_rs, (unsigned char**)&m_shards[0],
                                               &m_marks[packet][0],
                                               m_totalShards, ALVR_MAX_VIDEO_BUFFER_SIZE);
         m_recoveredPacket[packet] = true;
