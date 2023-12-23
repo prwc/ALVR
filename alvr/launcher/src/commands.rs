@@ -7,7 +7,7 @@ use std::{
     thread,
     time::{Duration, Instant},
 };
-use sysinfo::{PidExt, ProcessExt, ProcessRefreshKind, RefreshKind, Signal, System, SystemExt};
+use sysinfo::{ProcessRefreshKind, RefreshKind, System};
 
 const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(10);
 
@@ -76,7 +76,7 @@ pub fn kill_steamvr() {
 
     for process in system.processes_by_name(&afs::exec_fname("vrmonitor")) {
         #[cfg(not(windows))]
-        process.kill_with(Signal::Term);
+        process.kill_with(sysinfo::Signal::Term);
         #[cfg(windows)]
         kill_process(process.pid().as_u32());
     }
@@ -85,7 +85,7 @@ pub fn kill_steamvr() {
 
     for process in system.processes_by_name(&afs::exec_fname("vrserver")) {
         #[cfg(not(windows))]
-        process.kill_with(Signal::Term);
+        process.kill_with(sysinfo::Signal::Term);
         #[cfg(windows)]
         kill_process(process.pid().as_u32());
     }

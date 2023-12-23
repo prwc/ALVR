@@ -1,6 +1,6 @@
 [package]
 name = "alvr_launcher"
-version = "18.6.0"
+version = "18.7.0"
 authors = ["alvr-org", "Riccardo Zaglia <riccardo.zaglia5@gmail.com>"]
 license = "MIT"
 edition = "2021"
@@ -17,7 +17,7 @@ alvr_filesystem = { path = "../filesystem" }
 druid = "0.7"
 serde_json = "1"
 single-instance = "0.3"
-sysinfo = "0.29"
+sysinfo = "0.30"
 ureq = "2"
 
 [target.'cfg(windows)'.dependencies]
