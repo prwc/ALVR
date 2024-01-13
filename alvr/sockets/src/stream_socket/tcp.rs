@@ -17,6 +17,8 @@ use tokio_util::codec::Framed;
 pub type TcpStreamSendSocket = Arc<Mutex<SplitSink<Framed<TcpStream, Ldc>, Bytes>>>;
 pub type TcpStreamReceiveSocket = SplitStream<Framed<TcpStream, Ldc>>;
 
+const IPTOS_DSCP_EF: u32 = 0xb8;
+
 pub async fn bind(
     port: u16,
     send_buffer_bytes: SocketBufferSize,
@@ -26,6 +28,9 @@ pub async fn bind(
     let socket = socket2::Socket::from(socket.into_std().map_err(err!())?);
 
     super::set_socket_buffers(&socket, send_buffer_bytes, recv_buffer_bytes).ok();
+
+    socket.set_nodelay(true).ok();
+    socket.set_tos(IPTOS_DSCP_EF).ok();
 
     TcpListener::from_std(socket.into()).map_err(err!())
 }
@@ -60,8 +65,10 @@ pub async fn connect_to_client(
 
     super::set_socket_buffers(&socket, send_buffer_bytes, recv_buffer_bytes).ok();
 
+    socket.set_nodelay(true).ok();
+    socket.set_tos(IPTOS_DSCP_EF).ok();
+
     let socket = TcpStream::from_std(socket.into()).map_err(err!())?;
-    socket.set_nodelay(true).map_err(err!())?;
     let socket = Framed::new(socket, Ldc::new());
     let (send_socket, receive_socket) = socket.split();
 

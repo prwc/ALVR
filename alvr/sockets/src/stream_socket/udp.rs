@@ -18,6 +18,8 @@ use tokio::{
 };
 use tokio_util::udp::UdpFramed;
 
+const IPTOS_DSCP_EF: u32 = 0xb8;
+
 #[allow(clippy::type_complexity)]
 #[derive(Clone)]
 pub struct UdpStreamSendSocket {
@@ -43,6 +45,8 @@ pub async fn bind(
     let socket = socket2::Socket::from(socket.into_std().map_err(err!())?);
 
     super::set_socket_buffers(&socket, send_buffer_bytes, recv_buffer_bytes).ok();
+
+    socket.set_tos(IPTOS_DSCP_EF).ok();
 
     UdpSocket::from_std(socket.into()).map_err(err!())
 }
