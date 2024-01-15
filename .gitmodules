@@ -1,3 +1,4 @@
 [submodule "alvr/openxr-client/alxr-engine-sys/cpp/ALVR-OpenXR-Engine"]
 	path = alvr/openxr-client/alxr-engine-sys/cpp/ALVR-OpenXR-Engine
-	url = https://github.com/korejan/ALVR-OpenXR-Engine.git
+	url = https://github.com/prwc/ALVR-OpenXR-Engine.git
+	branch = test-mask-shader
