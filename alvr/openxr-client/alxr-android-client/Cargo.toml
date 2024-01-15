@@ -1,9 +1,9 @@
 [package]
-name = "alxr-android-client"
+name = "alxr-android-client-prwc"
 version = "0.22.0"
-authors = ["korejan <64199710+korejan@users.noreply.github.com>"]
+authors = ["korejan <64199710+korejan@users.noreply.github.com>", "Peerawit Canthasaksiri <5309753+prwc@users.noreply.github.com>"]
 edition = "2021"
-description = "An OpenXR based ALVR client for android platorms"
+description = "An OpenXR based ALVR client with custom mask for android platorms"
 
 # If you modify this file please consider if it needs replicating in ./quest/Cargo.toml & ./pico-neo/Cargo.toml
 # cargo(-apk) has a limitation of not being able to apply build time conditional logic to toml meta data.
@@ -41,7 +41,7 @@ build_targets = ["aarch64-linux-android", "armv7-linux-androideabi", "x86_64-lin
 
 # Name for final APK file.
 # Defaults to package name.
-apk_name = "alxr-client"
+apk_name = "alxr-client-prwc"
 
 # Folder containing extra shared libraries intended to be dynamically loaded at runtime.
 # Files matching `libs_folder/${android_abi}/*.so` are added to the apk
@@ -56,10 +56,10 @@ apk_name = "alxr-client"
 
 # The Java package name for your application.
 # Hyphens are converted to underscores.
-package = "com.alvr.alxr_client"
+package = "com.alvr.alxr_client_prwc"
 
 # The user-friendly name for your app, as displayed in the applications menu.
-label = "alxr_client"
+label = "alxr_client_prwc"
 
 # This is automatically set from cargo version, do no define!
 #version_code = 1
